@@ -1,0 +1,125 @@
+<div class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-purple-700">
+      Gerador Inteligente Lotofácil
+    </h1>
+    <p class="text-gray-600 mt-2">
+      Crie jogos otimizados com base em estatísticas!
+    </p>
+  </div>
+  <!-- Main Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Input Section -->
+    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        1. Preencha os Dados
+      </h2>
+      <div class="mb-4">
+        <label
+          for="last-draw"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Dezenas do último concurso:</label
+        >
+        <input
+          #lastDraw
+          type="text"
+          id="last-draw"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+          placeholder="Ex: 1, 4, 5, 8, 10..."
+        />
+        <p class="text-xs text-gray-500 mt-1">
+          Digite as 15 dezenas separadas por vírgula.
+        </p>
+      </div>
+      <div class="mb-6">
+        <label
+          for="num-games-lf"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Quantidade de jogos a gerar:</label
+        >
+        <input
+          #numGamesLf
+          type="number"
+          id="num-games-lf"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+          value="3"
+          min="1"
+          max="50"
+        />
+      </div>
+      <button
+        (click)="gerarJogos(lastDraw.value, numGamesLf.value)"
+        [disabled]="estaGerando"
+        class="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-purple-700 transition-all"
+      >
+        {{ estaGerando ? "Gerando..." : "Gerar Jogos da Sorte" }}
+      </button>
+      <div
+        *ngIf="mensagem"
+        [ngClass]="{
+          'text-red-600': tipoMensagem === 'error',
+          'text-green-600': tipoMensagem === 'success'
+        }"
+        class="mt-4 text-sm text-center font-semibold"
+      >
+        {{ mensagem }}
+      </div>
+    </div>
+    <!-- Rules Section -->
+    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        Estratégias Aplicadas
+      </h2>
+      <ul class="space-y-3 text-gray-700 text-sm">
+        <li class="flex items-start">
+          <span class="text-purple-600 font-bold mr-2">✓</span
+          ><strong>Dezenas Repetidas:</strong> Busca jogos com 8, 9 ou 10
+          dezenas do concurso anterior.
+        </li>
+        <li class="flex items-start">
+          <span class="text-purple-600 font-bold mr-2">✓</span
+          ><strong>Pares e Ímpares:</strong> Equilibra entre 7/8 ou 8/7 dezenas
+          ímpares/pares.
+        </li>
+        <li class="flex items-start">
+          <span class="text-purple-600 font-bold mr-2">✓</span
+          ><strong>Moldura e Miolo:</strong> Prioriza jogos com 9, 10 ou 11
+          dezenas na moldura.
+        </li>
+        <li class="flex items-start">
+          <span class="text-purple-600 font-bold mr-2">✓</span
+          ><strong>Números Primos:</strong> Filtra por jogos que contenham 4, 5
+          ou 6 dezenas primas.
+        </li>
+        <li class="flex items-start">
+          <span class="text-purple-600 font-bold mr-2">✓</span
+          ><strong>Soma das Dezenas:</strong> Garante que a soma total esteja
+          entre 185 e 220.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Results Section -->
+  <div class="mt-8" *ngIf="jogosGerados.length > 0">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">
+      Jogos Gerados
+    </h2>
+    <div
+      *ngFor="let jogo of jogosGerados; let i = index"
+      class="bg-white p-4 rounded-lg shadow-md mb-4 flex flex-wrap items-center justify-between fade-in"
+    >
+      <div>
+        <span *ngFor="let numero of jogo" class="number-ball-loto">
+          {{ numero | number : "2.0" }}
+        </span>
+      </div>
+      <button
+        (click)="copiarJogo(jogo, i)"
+        class="bg-gray-200 text-gray-700 text-sm font-semibold py-1 px-3 rounded-md hover:bg-gray-300 transition-colors mt-3 sm:mt-0"
+      >
+        {{ statusCopia[i] || "Copiar" }}
+      </button>
+    </div>
+  </div>
+</div>
