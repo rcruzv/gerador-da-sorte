@@ -1,59 +1,63 @@
-# GeradorDaSorte
+# Gerador da Sorte
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.0.
+Aplicação Angular para gerar combinações de Mega-Sena e Lotofácil usando filtros estatísticos populares, como equilíbrio entre pares e ímpares, soma das dezenas, distribuição no volante e repetição de dezenas do concurso anterior no caso da Lotofácil.
 
-## Development server
+> **Importante:** os filtros aplicados não garantem prêmio e não aumentam a probabilidade matemática de uma combinação específica ser sorteada. Em uma loteria justa, cada combinação válida tem a mesma chance de ocorrer. O objetivo do projeto é apenas evitar padrões considerados pouco desejáveis por critérios estatísticos comuns.
 
-To start a local development server, run:
+## Modalidades disponíveis
 
-```bash
-ng serve
-```
+### Mega-Sena
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Gera jogos com 6 dezenas entre 1 e 60 aplicando os seguintes filtros:
 
-## Code scaffolding
+- 2, 3 ou 4 dezenas ímpares;
+- soma total entre 160 e 240;
+- dezenas distribuídas em pelo menos 3 dos 4 quadrantes do volante;
+- no máximo 2 dezenas na mesma linha ou coluna.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Lotofácil
 
-```bash
-ng generate component component-name
-```
+Gera jogos com 15 dezenas entre 1 e 25. Para usar essa modalidade, informe as 15 dezenas do último concurso. Os filtros aplicados são:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- 8, 9 ou 10 dezenas repetidas do concurso anterior;
+- 7 ou 8 dezenas ímpares;
+- 9, 10 ou 11 dezenas na moldura;
+- 4, 5 ou 6 dezenas primas;
+- soma total entre 185 e 220.
 
-```bash
-ng generate --help
-```
+## Como executar
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Instale as dependências:
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Inicie o servidor de desenvolvimento:
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Acesse `http://localhost:4200/` no navegador.
 
-## Additional Resources
+## Build
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+npm run build
+```
+
+Os artefatos serão gerados em `dist/`.
+
+## Testes
+
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+## Observações técnicas
+
+- O projeto usa Angular 20.
+- A geração é feita em lotes assíncronos para reduzir travamentos perceptíveis na interface.
+- A quantidade de jogos é limitada entre 1 e 50 por geração.
+- A aplicação não depende mais de Tailwind via CDN nem de Google Fonts no `index.html`; os estilos necessários foram definidos localmente.

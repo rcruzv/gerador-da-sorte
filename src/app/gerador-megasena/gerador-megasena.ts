@@ -1,25 +1,27 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importe o CommonModule
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gerador-megasena',
-  standalone: true, // Adicione standalone: true
-  imports: [CommonModule], // Adicione CommonModule aos imports
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './gerador-megasena.html',
   styleUrls: ['./gerador-megasena.css'],
 })
 export class GeradorMegasenaComponent {
-  // Propriedades para controlar o estado da UI
   jogosGerados: number[][] = [];
   mensagem: string = '';
   tipoMensagem: 'success' | 'error' | 'info' = 'info';
   estaGerando: boolean = false;
   statusCopia: { [key: number]: string } = {};
 
-  // Constantes estatísticas
+  private readonly MIN_GAMES = 1;
+  private readonly MAX_GAMES = 50;
+  private readonly MAX_ATTEMPTS = 1000000;
+  private readonly ATTEMPTS_PER_BATCH = 5000;
   private readonly ALL_NUMBERS = Array.from({ length: 60 }, (_, i) => i + 1);
   private readonly ODD_NUMBERS = new Set(
-    this.ALL_NUMBERS.filter((n) => n % 2 !== 0)
+    this.ALL_NUMBERS.filter((n) => n % 2 !== 0),
   );
   private readonly QUADRANTS = [
     new Set([1, 2, 3, 4, 5, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25]),
@@ -28,26 +30,26 @@ export class GeradorMegasenaComponent {
     new Set([36, 37, 38, 39, 40, 46, 47, 48, 49, 50, 56, 57, 58, 59, 60]),
   ];
 
-  // Método principal chamado pelo botão
   gerarJogos(numGamesStr: string): void {
-    const numGames = parseInt(numGamesStr, 10);
-    if (isNaN(numGames) || numGames < 1) {
-      this.mostrarMensagem('Quantidade de jogos inválida.', 'error');
-      return;
-    }
+    const numGames = this.getValidatedGameCount(numGamesStr);
+    if (numGames === null) return;
 
     this.estaGerando = true;
     this.jogosGerados = [];
-    this.mostrarMensagem('Buscando as melhores combinações...', 'info');
+    this.statusCopia = {};
+    this.mostrarMensagem('Buscando combinações filtradas...', 'info');
 
-    // Usar setTimeout para não travar a UI
-    setTimeout(() => {
-      const generatedGames = [];
-      const generatedGamesSet = new Set<string>();
-      let attempts = 0;
-      const maxAttempts = 1000000;
+    const generatedGames: number[][] = [];
+    const generatedGamesSet = new Set<string>();
+    let attempts = 0;
 
-      while (generatedGames.length < numGames && attempts < maxAttempts) {
+    const processBatch = () => {
+      const batchLimit = Math.min(
+        attempts + this.ATTEMPTS_PER_BATCH,
+        this.MAX_ATTEMPTS,
+      );
+
+      while (generatedGames.length < numGames && attempts < batchLimit) {
         const candidate = this.generateCandidate();
         if (this.isGameValid(candidate)) {
           const sortedGame = Array.from(candidate).sort((a, b) => a - b);
@@ -60,26 +62,50 @@ export class GeradorMegasenaComponent {
         attempts++;
       }
 
+      if (generatedGames.length < numGames && attempts < this.MAX_ATTEMPTS) {
+        setTimeout(processBatch, 0);
+        return;
+      }
+
       this.jogosGerados = generatedGames;
       this.estaGerando = false;
 
       if (this.jogosGerados.length < numGames) {
         this.mostrarMensagem(
           `Encontrados ${this.jogosGerados.length} de ${numGames} jogos. Tente novamente.`,
-          'info'
+          'info',
         );
       } else {
         this.mostrarMensagem(
           `Sucesso! ${this.jogosGerados.length} jogos gerados.`,
-          'success'
+          'success',
         );
       }
-    }, 50);
+    };
+
+    setTimeout(processBatch, 0);
+  }
+
+  private getValidatedGameCount(numGamesStr: string): number | null {
+    const numGames = Number(numGamesStr);
+    if (
+      !Number.isInteger(numGames) ||
+      numGames < this.MIN_GAMES ||
+      numGames > this.MAX_GAMES
+    ) {
+      this.mostrarMensagem(
+        'Informe uma quantidade entre 1 e 50 jogos.',
+        'error',
+      );
+      return null;
+    }
+
+    return numGames;
   }
 
   private mostrarMensagem(
     texto: string,
-    tipo: 'success' | 'error' | 'info'
+    tipo: 'success' | 'error' | 'info',
   ): void {
     this.mensagem = texto;
     this.tipoMensagem = tipo;
@@ -134,11 +160,26 @@ export class GeradorMegasenaComponent {
 
   copiarJogo(jogo: number[], index: number): void {
     const gameString = jogo.join(', ');
-    navigator.clipboard.writeText(gameString).then(() => {
-      this.statusCopia[index] = 'Copiado!';
-      setTimeout(() => {
-        this.statusCopia[index] = 'Copiar';
-      }, 2000);
-    });
+    if (!navigator.clipboard?.writeText) {
+      this.statusCopia[index] = 'Erro ao copiar';
+      this.mostrarMensagem(
+        'Não foi possível acessar a área de transferência.',
+        'error',
+      );
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(gameString)
+      .then(() => {
+        this.statusCopia[index] = 'Copiado!';
+        setTimeout(() => {
+          this.statusCopia[index] = 'Copiar';
+        }, 2000);
+      })
+      .catch(() => {
+        this.statusCopia[index] = 'Erro ao copiar';
+        this.mostrarMensagem('Não foi possível copiar o jogo.', 'error');
+      });
   }
 }

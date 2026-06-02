@@ -15,8 +15,12 @@ export class GeradorLotofacilComponent {
   estaGerando: boolean = false;
   statusCopia: { [key: number]: string } = {};
 
+  private readonly MIN_GAMES = 1;
+  private readonly MAX_GAMES = 50;
+  private readonly MAX_ATTEMPTS = 500000;
+  private readonly ATTEMPTS_PER_BATCH = 5000;
   private readonly ALL_NUMBERS = new Set(
-    Array.from({ length: 25 }, (_, i) => i + 1)
+    Array.from({ length: 25 }, (_, i) => i + 1),
   );
   private readonly ODD_NUMBERS = new Set([
     1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25,
@@ -30,7 +34,7 @@ export class GeradorLotofacilComponent {
     if (!lastDrawStr) {
       this.mostrarMensagem(
         'Por favor, insira as dezenas do último concurso.',
-        'error'
+        'error',
       );
       return null;
     }
@@ -42,7 +46,7 @@ export class GeradorLotofacilComponent {
     if (uniqueNumbers.size !== 15) {
       this.mostrarMensagem(
         `Você inseriu ${uniqueNumbers.size} dezenas válidas. São necessárias 15.`,
-        'error'
+        'error',
       );
       return null;
     }
@@ -53,23 +57,25 @@ export class GeradorLotofacilComponent {
     const lastDraw = this.getValidatedLastDraw(lastDrawStr);
     if (!lastDraw) return;
 
-    const numGames = parseInt(numGamesStr, 10);
-    if (isNaN(numGames) || numGames < 1) {
-      this.mostrarMensagem('Quantidade de jogos inválida.', 'error');
-      return;
-    }
+    const numGames = this.getValidatedGameCount(numGamesStr);
+    if (numGames === null) return;
 
     this.estaGerando = true;
     this.jogosGerados = [];
-    this.mostrarMensagem('Buscando as melhores combinações...', 'info');
+    this.statusCopia = {};
+    this.mostrarMensagem('Buscando combinações filtradas...', 'info');
 
-    setTimeout(() => {
-      const generatedGames: number[][] = [];
-      const generatedGamesSet = new Set<string>();
-      let attempts = 0;
-      const maxAttempts = 500000;
+    const generatedGames: number[][] = [];
+    const generatedGamesSet = new Set<string>();
+    let attempts = 0;
 
-      while (generatedGames.length < numGames && attempts < maxAttempts) {
+    const processBatch = () => {
+      const batchLimit = Math.min(
+        attempts + this.ATTEMPTS_PER_BATCH,
+        this.MAX_ATTEMPTS,
+      );
+
+      while (generatedGames.length < numGames && attempts < batchLimit) {
         const candidate = this.generateCandidate();
         if (this.isGameValid(candidate, lastDraw)) {
           const sortedGame = Array.from(candidate).sort((a, b) => a - b);
@@ -82,21 +88,45 @@ export class GeradorLotofacilComponent {
         attempts++;
       }
 
+      if (generatedGames.length < numGames && attempts < this.MAX_ATTEMPTS) {
+        setTimeout(processBatch, 0);
+        return;
+      }
+
       this.jogosGerados = generatedGames;
       this.estaGerando = false;
 
       if (this.jogosGerados.length < numGames) {
         this.mostrarMensagem(
           `Encontrados ${this.jogosGerados.length} de ${numGames} jogos.`,
-          'info'
+          'info',
         );
       } else {
         this.mostrarMensagem(
           `Sucesso! ${this.jogosGerados.length} jogos gerados.`,
-          'success'
+          'success',
         );
       }
-    }, 50);
+    };
+
+    setTimeout(processBatch, 0);
+  }
+
+  private getValidatedGameCount(numGamesStr: string): number | null {
+    const numGames = Number(numGamesStr);
+    if (
+      !Number.isInteger(numGames) ||
+      numGames < this.MIN_GAMES ||
+      numGames > this.MAX_GAMES
+    ) {
+      this.mostrarMensagem(
+        'Informe uma quantidade entre 1 e 50 jogos.',
+        'error',
+      );
+      return null;
+    }
+
+    return numGames;
   }
 
   private isGameValid(candidate: Set<number>, lastDraw: Set<number>): boolean {
@@ -131,7 +161,7 @@ export class GeradorLotofacilComponent {
 
   private mostrarMensagem(
     texto: string,
-    tipo: 'success' | 'error' | 'info'
+    tipo: 'success' | 'error' | 'info',
   ): void {
     this.mensagem = texto;
     this.tipoMensagem = tipo;
@@ -139,11 +169,26 @@ export class GeradorLotofacilComponent {
 
   copiarJogo(jogo: number[], index: number): void {
     const gameString = jogo.join(', ');
-    navigator.clipboard.writeText(gameString).then(() => {
-      this.statusCopia[index] = 'Copiado!';
-      setTimeout(() => {
-        this.statusCopia[index] = 'Copiar';
-      }, 2000);
-    });
+    if (!navigator.clipboard?.writeText) {
+      this.statusCopia[index] = 'Erro ao copiar';
+      this.mostrarMensagem(
+        'Não foi possível acessar a área de transferência.',
+        'error',
+      );
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(gameString)
+      .then(() => {
+        this.statusCopia[index] = 'Copiado!';
+        setTimeout(() => {
+          this.statusCopia[index] = 'Copiar';
+        }, 2000);
+      })
+      .catch(() => {
+        this.statusCopia[index] = 'Erro ao copiar';
+        this.mostrarMensagem('Não foi possível copiar o jogo.', 'error');
+      });
   }
 }

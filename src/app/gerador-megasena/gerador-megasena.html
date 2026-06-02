@@ -5,7 +5,11 @@
       Gerador Inteligente Mega-Sena
     </h1>
     <p class="text-gray-600 mt-2">
-      Crie jogos otimizados com base em estatísticas para buscar a quina!
+      Gere combinações filtradas por critérios estatísticos populares.
+    </p>
+    <p class="text-xs text-gray-500 mt-2">
+      Os filtros não garantem prêmio nem aumentam a probabilidade matemática do
+      sorteio.
     </p>
   </div>
 
@@ -37,13 +41,13 @@
         [disabled]="estaGerando"
         class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all"
       >
-        {{ estaGerando ? "Gerando..." : "Gerar Jogos da Sorte" }}
+        {{ estaGerando ? "Gerando..." : "Gerar combinações" }}
       </button>
       <div
         *ngIf="mensagem"
         [ngClass]="{
           'text-red-600': tipoMensagem === 'error',
-          'text-green-600': tipoMensagem === 'success'
+          'text-green-600': tipoMensagem === 'success',
         }"
         class="mt-4 text-sm text-center font-semibold"
       >
@@ -92,7 +96,7 @@
     >
       <div>
         <span *ngFor="let numero of jogo" class="number-ball">
-          {{ numero | number : "2.0" }}
+          {{ numero | number: "2.0" }}
         </span>
       </div>
       <button
