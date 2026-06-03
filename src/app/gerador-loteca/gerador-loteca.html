@@ -1,0 +1,129 @@
+<div class="max-w-5xl mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Gerador de Palpites Loteca</h1>
+    <p class="text-gray-600 mt-2">
+      A Loteca é diferente dos geradores numéricos: cada aposta é formada por
+      palpites de resultado para 14 confrontos, usando 1, X ou 2.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        Configuração dos palpites
+      </h2>
+      <p class="text-sm text-gray-600 mb-4">
+        Informe quantos cartões deseja gerar. Cada cartão terá uma escolha para
+        cada confronto: <strong>1</strong> para coluna um/mandante,
+        <strong>X</strong> para empate e <strong>2</strong> para coluna
+        dois/visitante.
+      </p>
+      <div class="mb-4">
+        <label
+          for="numGamesLoteca"
+          class="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Quantidade de cartões
+        </label>
+        <input
+          #numGamesLoteca
+          id="numGamesLoteca"
+          type="number"
+          class="w-full p-3 border border-gray-300 rounded-md shadow-sm"
+          value="3"
+          min="1"
+          max="50"
+        />
+      </div>
+      <button
+        (click)="gerarJogos(numGamesLoteca.value)"
+        [disabled]="estaGerando"
+        class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition-all disabled:opacity-60"
+      >
+        {{ estaGerando ? "Gerando..." : "Gerar palpites" }}
+      </button>
+      <div
+        *ngIf="mensagem"
+        [ngClass]="{
+          'text-red-600': tipoMensagem === 'error',
+          'text-green-600': tipoMensagem === 'success',
+          'text-gray-600': tipoMensagem === 'info',
+        }"
+        class="mt-4 text-sm text-center font-semibold"
+      >
+        {{ mensagem }}
+      </div>
+    </div>
+
+    <div class="bg-emerald-50 p-6 rounded-lg border border-emerald-200">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        Modelo aplicado na Loteca
+      </h2>
+      <ul class="space-y-3 text-gray-700 text-sm">
+        <li class="flex items-start">
+          <span class="text-emerald-600 font-bold mr-2">✓</span>
+          <span>
+            <strong>14 confrontos:</strong> cada posição representa uma partida
+            do volante, e não uma dezena sorteada.
+          </span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-emerald-600 font-bold mr-2">✓</span>
+          <span>
+            <strong>Três opções:</strong> os palpites usam apenas 1, X e 2 para
+            indicar os possíveis resultados.
+          </span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-amber-600 font-bold mr-2">!</span>
+          <span>
+            <strong>Regras estatísticas pendentes:</strong> validar com o
+            responsável de produto limites de empates, distribuição de
+            mandantes/visitantes, favoritos ou se a regra deve permanecer como
+            aleatoriedade simples.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-8" *ngIf="palpitesGerados.length > 0">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">
+      Palpites Gerados
+    </h2>
+    <div
+      *ngFor="let jogo of palpitesGerados; let i = index"
+      class="bg-white p-5 rounded-lg shadow-md mb-4 fade-in"
+    >
+      <div
+        class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
+      >
+        <div class="w-full">
+          <h3 class="font-semibold text-gray-700 mb-3">Cartão {{ i + 1 }}</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-3">
+            <div
+              *ngFor="let palpite of jogo; let partidaIndex = index"
+              class="palpite-card"
+              [ngClass]="{
+                'palpite-home': palpite === '1',
+                'palpite-draw': palpite === 'X',
+                'palpite-away': palpite === '2',
+              }"
+            >
+              <span class="text-xs font-medium uppercase tracking-wide">
+                {{ partidas[partidaIndex] }}
+              </span>
+              <strong>{{ palpite }}</strong>
+            </div>
+          </div>
+        </div>
+        <button
+          (click)="copiarJogo(jogo, i)"
+          class="bg-gray-200 text-gray-700 text-sm font-semibold py-2 px-4 rounded-md hover:bg-gray-300 transition-colors lg:mt-8"
+        >
+          {{ statusCopia[i] || "Copiar" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
