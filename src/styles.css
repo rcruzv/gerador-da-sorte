@@ -564,21 +564,8 @@ button:disabled {
   padding: 0.75rem 0.9rem;
   border-radius: 0.9rem;
   font-size: 0.9rem;
-  color: #0369a1;
-  background: #e0f2fe;
   font-weight: 800;
   text-align: center;
-}
-
-.field-group + .field-group {
-  margin-top: 1rem;
-}
-
-.helper-text {
-  margin: 0.45rem 0 0;
-  color: #64748b;
-  font-size: 0.78rem;
-  line-height: 1.35;
 }
 
 .message-success {
@@ -694,8 +681,6 @@ button:disabled {
   gap: 0.35rem;
 }
 
-.number-ball,
-.number-ball-loto,
 .number-ball-quina,
 .result-ball-loteca {
   display: inline-flex;
@@ -711,8 +696,6 @@ button:disabled {
   transition: transform 0.2s ease;
 }
 
-.number-ball:hover,
-.number-ball-loto:hover,
 .number-ball-quina:hover,
 .result-ball-loteca:hover {
   transform: translateY(-2px) scale(1.04);
@@ -780,8 +763,6 @@ button:disabled {
     padding: 1.25rem;
   }
 
-  .number-ball,
-  .number-ball-loto,
   .number-ball-quina,
   .result-ball-loteca {
     width: 2.2rem;
