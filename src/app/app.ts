@@ -7,6 +7,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
+import { AuthGateway } from './auth/auth.gateway';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +19,14 @@ export class App {
   protected readonly title = signal('gerador-da-sorte');
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthGateway);
   private readonly currentPath = signal(this.document.location.pathname);
   protected readonly isSidebarCollapsed = signal(false);
   protected readonly isUserMenuOpen = signal(false);
-  protected readonly isLandingRoute = computed(() => {
+  protected readonly currentUser = this.auth.currentUser;
+  protected readonly isPublicRoute = computed(() => {
     const path = this.currentPath().split('?')[0].split('#')[0];
-    return path === '' || path === '/';
+    return path === '' || path === '/' || path.startsWith('/auth');
   });
 
   constructor() {
@@ -49,5 +52,11 @@ export class App {
     }
 
     void this.document.documentElement.requestFullscreen();
+  }
+
+  protected logout(): void {
+    this.auth.logout();
+    this.isUserMenuOpen.set(false);
+    void this.router.navigate(['/auth/login']);
   }
 }

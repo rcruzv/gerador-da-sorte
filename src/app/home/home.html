@@ -10,8 +10,8 @@
       </p>
 
       <div class="hero-actions" aria-label="Ações principais">
-        <a routerLink="/megasena" class="primary-link">Gerar Mega-Sena</a>
-        <a routerLink="/lotofacil" class="secondary-link">Testar Lotofácil</a>
+        <a routerLink="/auth/login" class="primary-link">Gerar Mega-Sena</a>
+        <a routerLink="/auth/register" class="secondary-link">Criar conta</a>
       </div>
 
       <dl class="hero-metrics" aria-label="Resumo do sistema">
@@ -67,8 +67,14 @@
       clara, responsiva e consistente.
     </p>
     <div class="hero-actions">
-      <a routerLink="/megasena" class="primary-link light">Começar agora</a>
-      <a routerLink="/estatisticas" class="secondary-link dark">Ver estatísticas</a>
+      <a routerLink="/auth/login" class="primary-link light">Começar agora</a>
+      <a
+        routerLink="/auth/login"
+        [queryParams]="{ returnUrl: '/estatisticas' }"
+        class="secondary-link dark"
+      >
+        Ver estatísticas
+      </a>
     </div>
   </section>
 </section>
