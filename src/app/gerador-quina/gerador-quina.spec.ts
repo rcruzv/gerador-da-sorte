@@ -33,4 +33,18 @@ describe('GeradorQuinaComponent', () => {
     );
     expect(component.tipoMensagem).toBe('error');
   });
+
+  it('should generate games with 5 numbers between 1 and 80', () => {
+    component.gerarJogos('3');
+
+    expect(component.jogosGerados.length).toBe(3);
+    component.jogosGerados.forEach((jogo) => {
+      expect(jogo.length).toBe(5);
+      expect(new Set(jogo).size).toBe(5);
+      jogo.forEach((dezena) => {
+        expect(dezena).toBeGreaterThanOrEqual(1);
+        expect(dezena).toBeLessThanOrEqual(80);
+      });
+    });
+  });
 });
