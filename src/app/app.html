@@ -1,28 +1,42 @@
 <div class="dashboard-shell">
   <aside class="sidebar" aria-label="Menu principal">
     <div class="sidebar-brand">
-      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" focusable="false">
+          <circle cx="24" cy="24" r="19" />
+          <path d="m15 24 6 6 13-15" />
+          <path d="M12 14h3M33 35h3M35 12v3M13 33v3" />
+        </svg>
+      </span>
       <div>
         <strong>Gerador da Sorte</strong>
-        <span>Dashboard</span>
+        <span>Laboratório de probabilidade</span>
       </div>
     </div>
 
     <nav class="sidebar-nav">
+      <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>Início</span>
+      </a>
       <a routerLink="/megasena" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">●</span>
+        <span class="nav-icon" aria-hidden="true">6</span>
         <span>Mega-Sena</span>
       </a>
       <a routerLink="/lotofacil" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">◆</span>
+        <span class="nav-icon" aria-hidden="true">15</span>
         <span>Lotofácil</span>
       </a>
+      <a routerLink="/estatisticas" routerLinkActive="active-link">
+        <span class="nav-icon" aria-hidden="true">%</span>
+        <span>Estatísticas</span>
+      </a>
       <a routerLink="/quina" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">⬟</span>
+        <span class="nav-icon" aria-hidden="true">5</span>
         <span>Quina</span>
       </a>
       <a routerLink="/loteca" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span class="nav-icon" aria-hidden="true">1X2</span>
         <span>Loteca</span>
       </a>
     </nav>
@@ -31,8 +45,8 @@
   <div class="dashboard-main">
     <header class="topbar">
       <div class="topbar-title">
-        <span>Menu</span>
-        <strong>Geradores de jogos</strong>
+        <span>Menu principal</span>
+        <strong>Geradores e análises</strong>
       </div>
 
       <button

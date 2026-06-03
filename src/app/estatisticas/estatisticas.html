@@ -1,0 +1,129 @@
+<section class="stats-page">
+  <header class="stats-header">
+    <div>
+      <span class="eyebrow">Análise demonstrativa</span>
+      <h1>Estatísticas do laboratório</h1>
+      <p>
+        Explore padrões visuais de frequência, paridade, soma e distribuição.
+        Estes dados são demonstrativos e podem ser conectados a uma fonte
+        oficial em uma etapa futura.
+      </p>
+    </div>
+
+    <div class="stats-tabs" role="tablist" aria-label="Modalidade">
+      <button
+        type="button"
+        [class.active]="selectedLottery === 'mega'"
+        (click)="selectLottery('mega')"
+      >
+        Mega-Sena
+      </button>
+      <button
+        type="button"
+        [class.active]="selectedLottery === 'loto'"
+        (click)="selectLottery('loto')"
+      >
+        Lotofácil
+      </button>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <article class="stats-card wide">
+      <div class="stats-card-heading">
+        <div>
+          <h2>Frequência de números</h2>
+          <p>{{ activeDataset.title }} · {{ activeDataset.range }}</p>
+        </div>
+        <span>Mais frequentes</span>
+      </div>
+
+      <div class="frequency-row">
+        <span *ngFor="let numero of activeDataset.frequentNumbers">
+          {{ numero | number: "2.0" }}
+        </span>
+      </div>
+    </article>
+
+    <article class="stats-card">
+      <div class="stats-card-heading">
+        <div>
+          <h2>Equilíbrio de paridade</h2>
+          <p>Relação entre pares e ímpares</p>
+        </div>
+      </div>
+
+      <div class="parity-ring">
+        <strong>{{ activeDataset.parity }}</strong>
+        <span>Referência visual</span>
+      </div>
+    </article>
+
+    <article class="stats-card">
+      <div class="stats-card-heading">
+        <div>
+          <h2>Distribuição de soma</h2>
+          <p>Faixa de referência</p>
+        </div>
+      </div>
+
+      <div class="sum-band">
+        <span>Frequente</span>
+        <strong>{{ activeDataset.sumRange }}</strong>
+        <p>{{ activeDataset.sumDescription }}</p>
+      </div>
+
+      <div class="sum-minmax">
+        <div>
+          <span>Mínimo</span>
+          <strong>{{ activeDataset.minSum }}</strong>
+        </div>
+        <div>
+          <span>Máximo</span>
+          <strong>{{ activeDataset.maxSum }}</strong>
+        </div>
+      </div>
+    </article>
+
+    <article class="stats-card wide">
+      <div class="stats-card-heading">
+        <div>
+          <h2>Mapa de calor</h2>
+          <p>Intensidade visual por posição no volante</p>
+        </div>
+        <span>Demonstrativo</span>
+      </div>
+
+      <div class="heatmap-grid" [class.loto-grid]="selectedLottery === 'loto'">
+        <span
+          *ngFor="let cell of activeDataset.heatmap"
+          [ngStyle]="getHeatStyle(cell)"
+        >
+          {{ cell.number | number: "2.0" }}
+        </span>
+      </div>
+    </article>
+  </div>
+
+  <section class="quadrant-section">
+    <h2>Análise por quadrante</h2>
+    <div class="quadrant-grid">
+      <article *ngFor="let quadrant of activeDataset.quadrants">
+        <span>{{ quadrant.value }}%</span>
+        <h3>{{ quadrant.label }}</h3>
+        <p>
+          Diferença de
+          <strong [class.negative]="quadrant.delta < 0">
+            {{ quadrant.delta > 0 ? "+" : "" }}{{ quadrant.delta }}%
+          </strong>
+          em relação à referência visual.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <p class="disclaimer">
+    Estatísticas demonstrativas não garantem prêmio nem alteram a probabilidade
+    matemática de uma combinação específica.
+  </p>
+</section>

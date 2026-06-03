@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   countIntersection,
@@ -17,11 +17,15 @@ import {
   styleUrls: ['./gerador-lotofacil.css'],
 })
 export class GeradorLotofacilComponent {
+  @ViewChildren('lastDrawInput')
+  private readonly lastDrawInputs?: QueryList<ElementRef<HTMLInputElement>>;
+
   jogosGerados: number[][] = [];
   mensagem: string = '';
   tipoMensagem: 'success' | 'error' | 'info' = 'info';
   estaGerando: boolean = false;
   statusCopia: { [key: number]: string } = {};
+  protected readonly lastDrawSlots = Array.from({ length: 15 }, (_, index) => index);
 
   private readonly MIN_GAMES = 1;
   private readonly MAX_GAMES = 50;
@@ -35,6 +39,16 @@ export class GeradorLotofacilComponent {
     1, 2, 3, 4, 5, 6, 10, 11, 15, 16, 20, 21, 22, 23, 24, 25,
   ]);
   private readonly PRIME_NUMBERS = new Set([2, 3, 5, 7, 11, 13, 17, 19, 23]);
+  private currentLastDraw: Set<number> | null = null;
+
+  protected gerarJogosFromSlots(numGamesStr: string): void {
+    const lastDraw = this.lastDrawInputs
+      ?.toArray()
+      .map((input) => input.nativeElement.value)
+      .join(',');
+
+    this.gerarJogos(lastDraw ?? '', numGamesStr);
+  }
 
   private getValidatedLastDraw(lastDrawStr: string): Set<number> | null {
     if (!lastDrawStr) {
@@ -66,6 +80,7 @@ export class GeradorLotofacilComponent {
     const numGames = this.getValidatedGameCount(numGamesStr);
     if (numGames === null) return;
 
+    this.currentLastDraw = lastDraw;
     this.estaGerando = true;
     this.jogosGerados = [];
     this.statusCopia = {};
@@ -130,6 +145,26 @@ export class GeradorLotofacilComponent {
 
   private generateCandidate(): Set<number> {
     return generateCandidateNumbers(this.ALL_NUMBERS, 15);
+  }
+
+  protected getLotofacilSummary(jogo: number[]): {
+    repeated: number;
+    odd: number;
+    frame: number;
+    prime: number;
+    sum: number;
+  } {
+    const candidate = new Set(jogo);
+
+    return {
+      repeated: this.currentLastDraw
+        ? countIntersection(candidate, this.currentLastDraw)
+        : 0,
+      odd: countIntersection(candidate, this.ODD_NUMBERS),
+      frame: countIntersection(candidate, this.FRAME_NUMBERS),
+      prime: countIntersection(candidate, this.PRIME_NUMBERS),
+      sum: jogo.reduce((acc, val) => acc + val, 0),
+    };
   }
 
   private mostrarMensagem(
