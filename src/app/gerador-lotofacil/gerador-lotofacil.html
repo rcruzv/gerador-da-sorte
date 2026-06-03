@@ -1,129 +1,163 @@
-<div class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8">
-  <!-- Header -->
-  <div class="text-center mb-8">
-    <h1 class="text-3xl md:text-4xl font-bold text-purple-700">
-      Gerador Inteligente Lotofácil
-    </h1>
-    <p class="text-gray-600 mt-2">
-      Gere combinações filtradas por critérios estatísticos populares.
-    </p>
-    <p class="text-xs text-gray-500 mt-2">
-      Os filtros não garantem prêmio nem aumentam a probabilidade matemática do
-      sorteio.
-    </p>
+<section class="lottery-page lotofacil-theme">
+  <div class="lottery-hero">
+    <div>
+      <span class="eyebrow">Gerador da sorte</span>
+      <h1>Gerador Inteligente Lotofácil</h1>
+      <p>
+        Combine dezenas do último concurso com filtros estatísticos em uma
+        experiência visual homogênea, moderna e responsiva.
+      </p>
+    </div>
+    <div class="hero-summary" aria-label="Resumo das regras da Lotofácil">
+      <strong>15</strong>
+      <span>dezenas por jogo</span>
+    </div>
   </div>
-  <!-- Main Content -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Input Section -->
-    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">
-        1. Preencha os Dados
-      </h2>
-      <div class="mb-4">
-        <label
-          for="last-draw"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Dezenas do último concurso:</label
-        >
-        <input
-          #lastDraw
-          type="text"
-          id="last-draw"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-          placeholder="Ex: 1, 4, 5, 8, 10..."
-        />
-        <p class="text-xs text-gray-500 mt-1">
-          Digite as 15 dezenas separadas por vírgula.
-        </p>
+
+  <div class="content-grid">
+    <form
+      class="config-card"
+      (submit)="
+        $event.preventDefault(); gerarJogos(lastDraw.value, numGamesLf.value)
+      "
+    >
+      <div class="card-heading">
+        <span class="step-badge">01</span>
+        <div>
+          <h2>Preencha os dados</h2>
+          <p>Informe o último concurso e a quantidade de jogos desejada.</p>
+        </div>
       </div>
-      <div class="mb-6">
-        <label
-          for="num-games-lf"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Quantidade de jogos a gerar:</label
-        >
-        <input
-          #numGamesLf
-          type="number"
-          id="num-games-lf"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-          value="3"
-          min="1"
-          max="50"
-        />
+
+      <div class="field-group">
+        <label for="last-draw" class="field-label">
+          Dezenas do último concurso
+        </label>
+        <div class="input-row">
+          <input
+            #lastDraw
+            type="text"
+            id="last-draw"
+            placeholder="Ex: 1, 4, 5, 8, 10..."
+          />
+        </div>
+        <p class="helper-text">Digite as 15 dezenas separadas por vírgula.</p>
       </div>
-      <button
-        (click)="gerarJogos(lastDraw.value, numGamesLf.value)"
-        [disabled]="estaGerando"
-        class="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-purple-700 transition-all"
-      >
+
+      <div class="field-group">
+        <label for="num-games-lf" class="field-label">
+          Quantidade de jogos a gerar
+        </label>
+        <div class="input-row">
+          <input
+            #numGamesLf
+            type="number"
+            id="num-games-lf"
+            value="3"
+            min="1"
+            max="50"
+            inputmode="numeric"
+          />
+          <span>máx. 50</span>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="estaGerando" class="primary-action">
         {{ estaGerando ? "Gerando..." : "Gerar combinações" }}
       </button>
+
       <div
         *ngIf="mensagem"
         [ngClass]="{
-          'text-red-600': tipoMensagem === 'error',
-          'text-green-600': tipoMensagem === 'success',
+          'message-error': tipoMensagem === 'error',
+          'message-success': tipoMensagem === 'success',
         }"
-        class="mt-4 text-sm text-center font-semibold"
+        class="feedback-message"
       >
         {{ mensagem }}
       </div>
-    </div>
-    <!-- Rules Section -->
-    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">
-        Estratégias Aplicadas
-      </h2>
-      <ul class="space-y-3 text-gray-700 text-sm">
-        <li class="flex items-start">
-          <span class="text-purple-600 font-bold mr-2">✓</span
-          ><strong>Dezenas Repetidas:</strong> Busca jogos com 8, 9 ou 10
-          dezenas do concurso anterior.
+    </form>
+
+    <aside class="rules-card">
+      <div class="card-heading">
+        <span class="step-badge">02</span>
+        <div>
+          <h2>Estratégias aplicadas</h2>
+          <p>Filtros utilizados para refinar as combinações sugeridas.</p>
+        </div>
+      </div>
+
+      <ul class="rules-list">
+        <li>
+          <span>✓</span>
+          <div>
+            <strong>Dezenas repetidas</strong>
+            <small
+              >Busca jogos com 8, 9 ou 10 dezenas do concurso anterior.</small
+            >
+          </div>
         </li>
-        <li class="flex items-start">
-          <span class="text-purple-600 font-bold mr-2">✓</span
-          ><strong>Pares e Ímpares:</strong> Equilibra entre 7/8 ou 8/7 dezenas
-          ímpares/pares.
+        <li>
+          <span>✓</span>
+          <div>
+            <strong>Pares e ímpares</strong>
+            <small>Equilibra entre 7/8 ou 8/7 dezenas ímpares/pares.</small>
+          </div>
         </li>
-        <li class="flex items-start">
-          <span class="text-purple-600 font-bold mr-2">✓</span
-          ><strong>Moldura e Miolo:</strong> Prioriza jogos com 9, 10 ou 11
-          dezenas na moldura.
+        <li>
+          <span>✓</span>
+          <div>
+            <strong>Moldura e miolo</strong>
+            <small>Prioriza jogos com 9, 10 ou 11 dezenas na moldura.</small>
+          </div>
         </li>
-        <li class="flex items-start">
-          <span class="text-purple-600 font-bold mr-2">✓</span
-          ><strong>Números Primos:</strong> Filtra por jogos que contenham 4, 5
-          ou 6 dezenas primas.
+        <li>
+          <span>✓</span>
+          <div>
+            <strong>Números primos</strong>
+            <small
+              >Filtra por jogos que contenham 4, 5 ou 6 dezenas primas.</small
+            >
+          </div>
         </li>
-        <li class="flex items-start">
-          <span class="text-purple-600 font-bold mr-2">✓</span
-          ><strong>Soma das Dezenas:</strong> Garante que a soma total esteja
-          entre 185 e 220.
+        <li>
+          <span>✓</span>
+          <div>
+            <strong>Soma das dezenas</strong>
+            <small>Garante que a soma total esteja entre 185 e 220.</small>
+          </div>
         </li>
       </ul>
-    </div>
+    </aside>
   </div>
-  <!-- Results Section -->
-  <div class="mt-8" *ngIf="jogosGerados.length > 0">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">
-      Jogos Gerados
-    </h2>
-    <div
-      *ngFor="let jogo of jogosGerados; let i = index"
-      class="bg-white p-4 rounded-lg shadow-md mb-4 flex flex-wrap items-center justify-between fade-in"
-    >
-      <div>
-        <span *ngFor="let numero of jogo" class="number-ball-loto">
-          {{ numero | number: "2.0" }}
-        </span>
-      </div>
-      <button
-        (click)="copiarJogo(jogo, i)"
-        class="bg-gray-200 text-gray-700 text-sm font-semibold py-1 px-3 rounded-md hover:bg-gray-300 transition-colors mt-3 sm:mt-0"
+
+  <section class="results-section" *ngIf="jogosGerados.length > 0">
+    <div class="results-heading">
+      <span>{{ jogosGerados.length }} jogos</span>
+      <h2>Jogos gerados</h2>
+      <p>Copie uma combinação individual para salvar ou compartilhar.</p>
+    </div>
+
+    <div class="results-list">
+      <article
+        *ngFor="let jogo of jogosGerados; let i = index"
+        class="result-card fade-in"
       >
-        {{ statusCopia[i] || "Copiar" }}
-      </button>
+        <div class="result-index">#{{ i + 1 }}</div>
+        <div class="balls-grid lotofacil-results">
+          <span *ngFor="let numero of jogo" class="number-ball-loto">
+            {{ numero | number: "2.0" }}
+          </span>
+        </div>
+        <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
+          {{ statusCopia[i] || "Copiar" }}
+        </button>
+      </article>
     </div>
-  </div>
-</div>
+  </section>
+
+  <p class="disclaimer">
+    Os filtros não garantem prêmio nem aumentam a probabilidade matemática do
+    sorteio.
+  </p>
+</section>

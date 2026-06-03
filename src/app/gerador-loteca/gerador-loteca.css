@@ -1,12 +1,18 @@
+:host {
+  display: block;
+}
+
+.loteca-theme {
+  --accent: #ea580c;
+  --accent-strong: #c2410c;
+  --accent-soft: #ffedd5;
+  --accent-rgb: 234, 88, 12;
+}
+
 .result-ball-loteca {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin: 0.25rem;
-  border-radius: 0.5rem;
-  background: #ea580c;
-  color: white;
-  font-weight: 700;
+  border-radius: 0.85rem;
+}
+
+.loteca-results {
+  gap: 0.3rem;
 }
