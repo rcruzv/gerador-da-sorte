@@ -26,5 +26,7 @@ describe('App', () => {
 
     expect(links).toContain('Mega-Sena');
     expect(links).toContain('Lotofácil');
+    expect(links).toContain('Quina');
+    expect(links).toContain('Loteca');
   });
 });
