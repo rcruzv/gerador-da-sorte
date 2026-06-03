@@ -2,33 +2,44 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-gerador-loteca',
+  selector: 'app-gerador-quina',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './gerador-loteca.html',
-  styleUrls: ['./gerador-loteca.css'],
+  templateUrl: './gerador-quina.html',
+  styleUrls: ['./gerador-quina.css'],
 })
-export class GeradorLotecaComponent {
-  palpitesGerados: string[][] = [];
+export class GeradorQuinaComponent {
+  jogosGerados: number[][] = [];
   mensagem: string = '';
   tipoMensagem: 'success' | 'error' | 'info' = 'info';
   statusCopia: { [key: number]: string } = {};
 
   private readonly MIN_GAMES = 1;
   private readonly MAX_GAMES = 50;
-  private readonly MATCHES_PER_BET = 14;
-  private readonly VALID_OUTCOMES = ['1', 'X', '2'];
+  private readonly ALL_NUMBERS = Array.from({ length: 80 }, (_, i) => i + 1);
 
-  gerarPalpites(numGamesStr: string): void {
+  gerarJogos(numGamesStr: string): void {
     const numGames = this.getValidatedGameCount(numGamesStr);
     if (numGames === null) return;
 
-    this.palpitesGerados = Array.from({ length: numGames }, () =>
-      this.generateGuess(),
-    );
+    this.jogosGerados = [];
     this.statusCopia = {};
+
+    const generatedGames: number[][] = [];
+    const generatedGamesSet = new Set<string>();
+
+    while (generatedGames.length < numGames) {
+      const sortedGame = this.generateGame();
+      const gameKey = sortedGame.join(',');
+      if (!generatedGamesSet.has(gameKey)) {
+        generatedGames.push(sortedGame);
+        generatedGamesSet.add(gameKey);
+      }
+    }
+
+    this.jogosGerados = generatedGames;
     this.mostrarMensagem(
-      `Sucesso! ${this.palpitesGerados.length} palpites gerados.`,
+      `Sucesso! ${this.jogosGerados.length} jogos gerados.`,
       'success',
     );
   }
@@ -41,7 +52,7 @@ export class GeradorLotecaComponent {
       numGames > this.MAX_GAMES
     ) {
       this.mostrarMensagem(
-        'Informe uma quantidade entre 1 e 50 palpites.',
+        'Informe uma quantidade entre 1 e 50 jogos.',
         'error',
       );
       return null;
@@ -50,11 +61,14 @@ export class GeradorLotecaComponent {
     return numGames;
   }
 
-  private generateGuess(): string[] {
-    return Array.from({ length: this.MATCHES_PER_BET }, () => {
-      const index = Math.floor(Math.random() * this.VALID_OUTCOMES.length);
-      return this.VALID_OUTCOMES[index];
-    });
+  private generateGame(): number[] {
+    const numbers = [...this.ALL_NUMBERS];
+    for (let i = numbers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    }
+
+    return numbers.slice(0, 5).sort((a, b) => a - b);
   }
 
   private mostrarMensagem(
@@ -65,8 +79,8 @@ export class GeradorLotecaComponent {
     this.tipoMensagem = tipo;
   }
 
-  copiarPalpite(palpite: string[], index: number): void {
-    const guessString = palpite.join(', ');
+  copiarJogo(jogo: number[], index: number): void {
+    const gameString = jogo.join(', ');
     if (!navigator.clipboard?.writeText) {
       this.statusCopia[index] = 'Erro ao copiar';
       this.mostrarMensagem(
@@ -77,7 +91,7 @@ export class GeradorLotecaComponent {
     }
 
     navigator.clipboard
-      .writeText(guessString)
+      .writeText(gameString)
       .then(() => {
         this.statusCopia[index] = 'Copiado!';
         setTimeout(() => {
@@ -86,7 +100,7 @@ export class GeradorLotecaComponent {
       })
       .catch(() => {
         this.statusCopia[index] = 'Erro ao copiar';
-        this.mostrarMensagem('Não foi possível copiar o palpite.', 'error');
+        this.mostrarMensagem('Não foi possível copiar o jogo.', 'error');
       });
   }
 }

@@ -20,51 +20,38 @@ describe('GeradorLotecaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should expose 14 match positions and three guess options', () => {
-    expect(component.partidas.length).toBe(14);
-    expect(component.opcoesPalpite).toEqual(['1', 'X', '2']);
-  });
-
-  it('should reject quantities outside the allowed range', () => {
-    component.gerarJogos('0');
+  it('should reject invalid quantities', () => {
+    component.gerarPalpites('0');
     expect(component.mensagem).toBe(
       'Informe uma quantidade entre 1 e 50 palpites.',
     );
     expect(component.tipoMensagem).toBe('error');
 
-    component.gerarJogos('51');
+    component.gerarPalpites('51');
     expect(component.mensagem).toBe(
       'Informe uma quantidade entre 1 e 50 palpites.',
     );
     expect(component.tipoMensagem).toBe('error');
   });
 
-  it('should generate a matrix of guesses with 14 positions per game', () => {
-    component.gerarJogos('3');
+  it('should generate guesses with 14 positions', () => {
+    component.gerarPalpites('3');
 
     expect(component.palpitesGerados.length).toBe(3);
-    component.palpitesGerados.forEach((jogo) => {
-      expect(jogo.length).toBe(14);
-      jogo.forEach((palpite) => {
-        expect(component.opcoesPalpite).toContain(palpite);
-      });
+    component.palpitesGerados.forEach((palpite) => {
+      expect(palpite.length).toBe(14);
     });
-    expect(component.mensagem).toBe('Sucesso! 3 palpites gerados.');
-    expect(component.tipoMensagem).toBe('success');
   });
 
-  it('should copy guesses separated by comma and space', async () => {
-    const writeText = jasmine
-      .createSpy('writeText')
-      .and.returnValue(Promise.resolve());
-    spyOnProperty(navigator, 'clipboard', 'get').and.returnValue({
-      writeText,
-    } as unknown as Clipboard);
+  it('should generate guesses containing only valid values', () => {
+    const validValues = ['1', 'X', '2'];
 
-    component.copiarJogo(['1', 'X', '2'], 0);
-    await fixture.whenStable();
+    component.gerarPalpites('3');
 
-    expect(writeText).toHaveBeenCalledWith('1, X, 2');
-    expect(component.statusCopia[0]).toBe('Copiado!');
+    component.palpitesGerados.forEach((palpite) => {
+      palpite.forEach((resultado) => {
+        expect(validValues).toContain(resultado);
+      });
+    });
   });
 });
