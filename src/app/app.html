@@ -1,66 +1,104 @@
-<div class="dashboard-shell">
-  <aside class="sidebar" aria-label="Menu principal">
-    <div class="sidebar-brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" focusable="false">
-          <circle cx="24" cy="24" r="19" />
-          <path d="m15 24 6 6 13-15" />
-          <path d="M12 14h3M33 35h3M35 12v3M13 33v3" />
-        </svg>
-      </span>
-      <div>
-        <strong>Gerador da Sorte</strong>
-        <span>Laboratorio de probabilidade</span>
+<ng-container *ngIf="isLandingRoute(); else authenticatedShell">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-template #authenticatedShell>
+  <div
+    class="dashboard-shell"
+    [class.sidebar-collapsed]="isSidebarCollapsed()"
+  >
+    <aside class="sidebar" aria-label="Menu principal">
+      <a class="sidebar-brand" routerLink="/" aria-label="Gerador da Sorte">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" focusable="false">
+            <circle cx="24" cy="24" r="19" />
+            <path d="m15 24 6 6 13-15" />
+            <path d="M12 14h3M33 35h3M35 12v3M13 33v3" />
+          </svg>
+        </span>
+        <div class="brand-copy">
+          <strong>Gerador da Sorte</strong>
+          <span>Laboratorio de probabilidade</span>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <a routerLink="/estatisticas" routerLinkActive="active-link" data-tooltip="Estatísticas">
+          <span class="nav-icon" aria-hidden="true">%</span>
+          <span class="nav-label">Estatísticas</span>
+        </a>
+
+        <div class="sidebar-divider" aria-hidden="true"></div>
+
+        <a routerLink="/megasena" routerLinkActive="active-link" data-tooltip="Mega-Sena">
+          <span class="nav-icon" aria-hidden="true">6</span>
+          <span class="nav-label">Mega-Sena</span>
+        </a>
+        <a routerLink="/lotofacil" routerLinkActive="active-link" data-tooltip="Lotofácil">
+          <span class="nav-icon" aria-hidden="true">15</span>
+          <span class="nav-label">Lotofácil</span>
+        </a>
+        <a routerLink="/quina" routerLinkActive="active-link" data-tooltip="Quina">
+          <span class="nav-icon" aria-hidden="true">5</span>
+          <span class="nav-label">Quina</span>
+        </a>
+        <a routerLink="/loteca" routerLinkActive="active-link" data-tooltip="Loteca">
+          <span class="nav-icon" aria-hidden="true">1X2</span>
+          <span class="nav-label">Loteca</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="sidebar-plan">
+        <span class="plan-label">Plano atual</span>
+        <strong>Free</strong>
+      </div>
+    </aside>
+
+    <div class="shell-actions">
+      <button
+        type="button"
+        class="shell-icon-button"
+        [attr.aria-label]="isSidebarCollapsed() ? 'Expandir menu' : 'Reduzir menu'"
+        [attr.title]="isSidebarCollapsed() ? 'Expandir menu' : 'Reduzir menu'"
+        (click)="toggleSidebar()"
+      >
+        {{ isSidebarCollapsed() ? "☰" : "☷" }}
+      </button>
+
+      <button
+        type="button"
+        class="shell-icon-button"
+        aria-label="Alternar tela cheia"
+        title="Tela cheia"
+        (click)="toggleFullscreen()"
+      >
+        ⛶
+      </button>
+
+      <div class="user-menu">
+        <button
+          type="button"
+          class="user-avatar"
+          aria-label="Abrir menu do usuário"
+          [attr.aria-expanded]="isUserMenuOpen()"
+          (click)="toggleUserMenu()"
+        >
+          U
+        </button>
+
+        <div class="user-dropdown" *ngIf="isUserMenuOpen()">
+          <a href="#">Perfil</a>
+          <a href="#">Preferências</a>
+          <a href="#">Suporte</a>
+          <a href="#">Sair</a>
+        </div>
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
-        <span class="nav-icon" aria-hidden="true">⌂</span>
-        <span>Início</span>
-      </a>
-      <a routerLink="/megasena" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">6</span>
-        <span>Mega-Sena</span>
-      </a>
-      <a routerLink="/lotofacil" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">15</span>
-        <span>Lotofácil</span>
-      </a>
-      <a routerLink="/estatisticas" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">%</span>
-        <span>Estatísticas</span>
-      </a>
-      <a routerLink="/quina" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">5</span>
-        <span>Quina</span>
-      </a>
-      <a routerLink="/loteca" routerLinkActive="active-link">
-        <span class="nav-icon" aria-hidden="true">1X2</span>
-        <span>Loteca</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-spacer"></div>
-
-    <div class="sidebar-plan">
-      <span>Plano atual: Free</span>
-      <button type="button">Assinar Pro</button>
-    </div>
-
-    <nav class="sidebar-footer" aria-label="Links secundarios">
-      <a href="#" aria-label="Suporte">
-        <span class="nav-icon" aria-hidden="true">?</span>
-        <span>Suporte</span>
-      </a>
-      <a href="#" aria-label="Sair">
-        <span class="nav-icon" aria-hidden="true">→</span>
-        <span>Sair</span>
-      </a>
-    </nav>
-  </aside>
-
-  <main class="dashboard-content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+    <main class="dashboard-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</ng-template>
