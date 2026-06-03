@@ -20,13 +20,15 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    const links = Array.from(compiled.querySelectorAll('a')).map((link) =>
-      link.textContent?.trim(),
-    );
+    const navText = Array.from(compiled.querySelectorAll('a'))
+      .map((link) => link.textContent?.trim() ?? '')
+      .join(' ');
 
-    expect(links).toContain('Mega-Sena');
-    expect(links).toContain('Lotofácil');
-    expect(links).toContain('Quina');
-    expect(links).toContain('Loteca');
+    expect(navText).toContain('Início');
+    expect(navText).toContain('Mega-Sena');
+    expect(navText).toContain('Lotofácil');
+    expect(navText).toContain('Estatísticas');
+    expect(navText).toContain('Quina');
+    expect(navText).toContain('Loteca');
   });
 });

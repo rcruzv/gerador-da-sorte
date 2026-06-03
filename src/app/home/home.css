@@ -1,0 +1,250 @@
+:host {
+  display: block;
+}
+
+.home-page {
+  display: grid;
+  gap: 2rem;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.7fr);
+  gap: 2rem;
+  align-items: center;
+  min-height: calc(100vh - 7.5rem);
+  padding: clamp(1.25rem, 4vw, 4rem);
+  border-radius: 0 0 2rem 2rem;
+  background:
+    radial-gradient(circle at 80% 12%, rgba(37, 99, 235, 0.14), transparent 22rem),
+    linear-gradient(135deg, #f8fbff 0%, #eef4ff 58%, #effdf7 100%);
+}
+
+.hero-copy h1 {
+  max-width: 46rem;
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(2.2rem, 7vw, 5.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+
+.hero-copy p,
+.section-heading p,
+.cta-band p {
+  max-width: 44rem;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.hero-actions,
+.hero-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.hero-actions {
+  margin-top: 1.5rem;
+}
+
+.primary-link,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.2rem;
+  padding: 0.9rem 1.3rem;
+  border-radius: 1rem;
+  font-weight: 900;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.primary-link {
+  color: #ffffff;
+  background: linear-gradient(135deg, #004ac6, #2563eb);
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.3);
+}
+
+.secondary-link {
+  color: #004ac6;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 0 0 1px #dbe4f5;
+}
+
+.primary-link:hover,
+.secondary-link:hover {
+  transform: translateY(-2px);
+}
+
+.primary-link.light {
+  color: #004ac6;
+  background: #ffffff;
+}
+
+.secondary-link.dark {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.hero-metrics {
+  margin: 1.4rem 0 0;
+}
+
+.hero-metrics div {
+  min-width: 7rem;
+}
+
+.hero-metrics dt {
+  color: #004ac6;
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.hero-metrics dd {
+  margin: 0.2rem 0 0;
+  color: #475569;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.recommendation-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(18px);
+}
+
+.card-kicker {
+  color: #004ac6;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.recommendation-card h2 {
+  margin: 0.7rem 0 0.25rem;
+  color: #0f172a;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+}
+
+.recommendation-card small {
+  display: block;
+  margin-top: 1rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.home-section {
+  padding: 1rem clamp(0rem, 2vw, 1.5rem);
+}
+
+.section-heading {
+  max-width: 48rem;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+.section-heading h2,
+.cta-band h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  padding: 1.15rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.85rem;
+  color: #004ac6;
+  background: #dbeafe;
+  font-weight: 900;
+}
+
+.feature-card h3 {
+  margin: 1rem 0 0.4rem;
+  color: #0f172a;
+}
+
+.feature-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.65;
+}
+
+.cta-band {
+  margin: 0 clamp(0rem, 2vw, 1.5rem) 1.5rem;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  border-radius: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+  background: linear-gradient(135deg, #004ac6, #2563eb);
+  box-shadow: 0 24px 55px rgba(37, 99, 235, 0.24);
+}
+
+.cta-band h2,
+.cta-band p {
+  color: #ffffff;
+}
+
+.cta-band p {
+  margin-inline: auto;
+}
+
+.cta-band .hero-actions {
+  justify-content: center;
+}
+
+@media (max-width: 980px) {
+  .home-hero,
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-hero,
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .primary-link,
+  .secondary-link {
+    width: 100%;
+  }
+}

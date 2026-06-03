@@ -1,0 +1,74 @@
+<section class="home-page">
+  <div class="home-hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Laboratório de probabilidade</span>
+      <h1>Sua sorte, organizada por filtros estatísticos.</h1>
+      <p>
+        Gere combinações para loterias brasileiras usando critérios de
+        distribuição, soma e equilíbrio. Os filtros refinam padrões, mas não
+        alteram a chance matemática de sorteio.
+      </p>
+
+      <div class="hero-actions" aria-label="Ações principais">
+        <a routerLink="/megasena" class="primary-link">Gerar Mega-Sena</a>
+        <a routerLink="/lotofacil" class="secondary-link">Testar Lotofácil</a>
+      </div>
+
+      <dl class="hero-metrics" aria-label="Resumo do sistema">
+        <div>
+          <dt>4</dt>
+          <dd>modalidades</dd>
+        </div>
+        <div>
+          <dt>50</dt>
+          <dd>jogos por lote</dd>
+        </div>
+      </dl>
+    </div>
+
+    <aside class="recommendation-card" aria-label="Exemplo demonstrativo">
+      <span class="card-kicker">Exemplo demonstrativo</span>
+      <h2>Mega-Sena</h2>
+      <p>Combinação formatada com a nova identidade visual.</p>
+      <div class="balls-grid">
+        <span *ngFor="let numero of recommendedNumbers" class="number-ball">
+          {{ numero | number: "2.0" }}
+        </span>
+      </div>
+      <small>
+        Exemplo visual. Use o gerador para criar combinações com filtros reais.
+      </small>
+    </aside>
+  </div>
+
+  <section class="home-section" aria-labelledby="science-title">
+    <div class="section-heading">
+      <span class="eyebrow">Ciência, não promessa</span>
+      <h2 id="science-title">Filtros úteis com linguagem responsável.</h2>
+      <p>
+        A experiência foi portada dos protótipos para Angular, mantendo a lógica
+        real do projeto e removendo promessas de aumento de chance.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <article *ngFor="let feature of featureCards" class="feature-card">
+        <span class="feature-icon">{{ feature.icon }}</span>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Pronto para gerar seus jogos?</h2>
+    <p>
+      Escolha uma modalidade e acompanhe os resultados em uma interface mais
+      clara, responsiva e consistente.
+    </p>
+    <div class="hero-actions">
+      <a routerLink="/megasena" class="primary-link light">Começar agora</a>
+      <a routerLink="/estatisticas" class="secondary-link dark">Ver estatísticas</a>
+    </div>
+  </section>
+</section>

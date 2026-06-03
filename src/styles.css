@@ -1,4 +1,8 @@
 :root {
+  --accent: #004ac6;
+  --accent-strong: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-rgb: 0, 74, 198;
   color: #1f2937;
   font-family:
     Inter,
@@ -430,11 +434,119 @@ button:disabled {
   font-weight: 700;
 }
 
+.hero-summary small {
+  display: block;
+  margin-top: 0.5rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
 .content-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.generator-workspace {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.45fr) minmax(0, 0.55fr);
+  gap: 1.25rem;
+  align-items: start;
+  margin-top: 1.25rem;
+}
+
+.generator-panel,
+.results-console {
+  min-width: 0;
+}
+
+.results-console {
+  min-height: 32rem;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.filter-stack {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.filter-tile {
+  padding: 0.95rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.filter-tile span,
+.result-metrics span {
+  display: block;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.filter-tile strong,
+.result-metrics strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.result-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.result-metrics article {
+  padding: 0.85rem;
+  border-radius: 0.9rem;
+  background: #f8fafc;
+}
+
+.last-draw-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.last-draw-grid label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.last-draw-grid label span {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.last-draw-grid input {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.8rem;
+  text-align: center;
+  font-weight: 900;
+  outline: 0;
+}
+
+.last-draw-grid input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.14);
 }
 
 .config-card,
@@ -633,6 +745,10 @@ button:disabled {
   text-align: center;
 }
 
+.results-heading.compact {
+  text-align: left;
+}
+
 .results-heading span {
   display: inline-flex;
   margin-bottom: 0.45rem;
@@ -669,6 +785,10 @@ button:disabled {
   padding: 1rem;
 }
 
+.result-card.loto-card {
+  grid-template-columns: 1fr auto;
+}
+
 .result-index {
   color: #94a3b8;
   font-size: 0.84rem;
@@ -681,6 +801,8 @@ button:disabled {
   gap: 0.35rem;
 }
 
+.number-ball,
+.number-ball-loto,
 .number-ball-quina,
 .result-ball-loteca {
   display: inline-flex;
@@ -696,9 +818,91 @@ button:disabled {
   transition: transform 0.2s ease;
 }
 
+.number-ball:hover,
+.number-ball-loto:hover,
 .number-ball-quina:hover,
 .result-ball-loteca:hover {
   transform: translateY(-2px) scale(1.04);
+}
+
+.result-summary {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.result-summary div {
+  padding: 0.55rem;
+  border-radius: 0.7rem;
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+.result-summary dt {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.result-summary dd {
+  margin: 0.2rem 0 0;
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 22rem;
+  padding: 2rem;
+  border: 2px dashed #dbe4f5;
+  border-radius: 1.25rem;
+  color: #64748b;
+  text-align: center;
+  background: rgba(248, 250, 252, 0.62);
+}
+
+.empty-state h3 {
+  margin: 0.8rem 0 0.25rem;
+  color: #0f172a;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+}
+
+.empty-state p {
+  max-width: 28rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 999px;
+  color: var(--accent-strong);
+  background: rgba(var(--accent-rgb), 0.12);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.loading-state .empty-icon {
+  animation: pulseGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 rgba(var(--accent-rgb), 0);
+  }
+  to {
+    transform: scale(1.04);
+    box-shadow: 0 0 36px rgba(var(--accent-rgb), 0.28);
+  }
 }
 
 .copy-action {
@@ -756,13 +960,31 @@ button:disabled {
   }
 }
 
+@media (max-width: 960px) {
+  .generator-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 520px) {
   .lottery-hero,
   .config-card,
-  .rules-card {
+  .rules-card,
+  .results-console {
     padding: 1rem;
   }
 
+.result-metrics,
+.result-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.last-draw-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+  .number-ball,
+  .number-ball-loto,
   .number-ball-quina,
   .result-ball-loteca {
     width: 2.2rem;

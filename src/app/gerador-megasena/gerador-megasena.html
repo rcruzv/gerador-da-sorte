@@ -1,32 +1,54 @@
 <section class="lottery-page megasena-theme">
   <div class="lottery-hero">
     <div>
-      <span class="eyebrow">Gerador da sorte</span>
-      <h1>Gerador Inteligente Mega-Sena</h1>
+      <span class="eyebrow">Mega-Sena</span>
+      <h1>Gerador de jogos com filtros reais</h1>
       <p>
-        Gere combinações filtradas por critérios estatísticos populares em uma
-        interface moderna, clara e alinhada às demais loterias.
+        Configure a quantidade de jogos e gere combinações com paridade, soma,
+        quadrantes e restrições de linha/coluna já aplicados pela lógica do
+        projeto.
       </p>
     </div>
-    <div class="hero-summary" aria-label="Resumo das regras da Mega-Sena">
+    <div class="hero-summary hero-status" aria-label="Resumo da Mega-Sena">
       <strong>6</strong>
       <span>dezenas por jogo</span>
+      <small>Até 50 combinações por lote</small>
     </div>
   </div>
 
-  <div class="content-grid">
+  <div class="generator-workspace">
     <form
-      class="config-card"
+      class="config-card generator-panel"
       (submit)="$event.preventDefault(); gerarJogos(numGames.value)"
     >
       <div class="card-heading">
         <span class="step-badge">01</span>
         <div>
-          <h2>Defina sua aposta</h2>
+          <h2>Filtros de probabilidade</h2>
           <p>
-            Escolha quantas combinações deseja gerar com filtros inteligentes.
+            Os parâmetros abaixo são fixos nesta etapa e conectados à lógica
+            real de geração.
           </p>
         </div>
+      </div>
+
+      <div class="filter-stack">
+        <article class="filter-tile">
+          <span>Equilíbrio par/ímpar</span>
+          <strong>2, 3 ou 4 ímpares</strong>
+        </article>
+        <article class="filter-tile">
+          <span>Soma dos números</span>
+          <strong>160 a 240</strong>
+        </article>
+        <article class="filter-tile">
+          <span>Distribuição</span>
+          <strong>Mín. 3 quadrantes</strong>
+        </article>
+        <article class="filter-tile">
+          <span>Linha e coluna</span>
+          <strong>Máx. 2 por eixo</strong>
+        </article>
       </div>
 
       <label for="num-games" class="field-label">
@@ -61,83 +83,43 @@
       </div>
     </form>
 
-    <aside class="rules-card">
-      <div class="card-heading">
-        <span class="step-badge">02</span>
-        <div>
-          <h2>Estratégias aplicadas</h2>
-          <p>Filtros utilizados para refinar as combinações sugeridas.</p>
-        </div>
+    <section class="results-console">
+      <div class="results-heading compact">
+        <span>{{ jogosGerados.length || 0 }} jogos</span>
+        <h2>Sugestões geradas</h2>
+        <p>Copie uma combinação individual para salvar ou compartilhar.</p>
       </div>
 
-      <ul class="rules-list">
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Pares e ímpares</strong>
-            <small
-              >Equilibra os jogos entre 3/3 ou 4/2 dezenas ímpares/pares.</small
-            >
+      <div *ngIf="estaGerando" class="empty-state loading-state">
+        <span class="empty-icon">...</span>
+        <h3>Processando combinações</h3>
+        <p>Os filtros estão sendo aplicados em lotes para evitar travamentos.</p>
+      </div>
+
+      <div *ngIf="!estaGerando && jogosGerados.length === 0" class="empty-state">
+        <span class="empty-icon">6</span>
+        <h3>Pronto para gerar</h3>
+        <p>Ajuste a quantidade ao lado e inicie a geração filtrada.</p>
+      </div>
+
+      <div class="results-list" *ngIf="!estaGerando && jogosGerados.length > 0">
+        <article
+          *ngFor="let jogo of jogosGerados; let i = index"
+          class="result-card fade-in"
+        >
+          <div class="result-index">Jogo #{{ i + 1 }}</div>
+          <div class="balls-grid">
+            <span *ngFor="let numero of jogo" class="number-ball">
+              {{ numero | number: "2.0" }}
+            </span>
           </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Soma das dezenas</strong>
-            <small
-              >Garante que a soma total dos 6 números esteja entre 160 e
-              240.</small
-            >
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Quadrantes</strong>
-            <small
-              >Distribui os números em pelo menos 3 dos 4 quadrantes do
-              volante.</small
-            >
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Linhas e colunas</strong>
-            <small
-              >Evita mais de 2 números na mesma linha ou coluna do
-              volante.</small
-            >
-          </div>
-        </li>
-      </ul>
-    </aside>
+          <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
+            {{ statusCopia[i] || "Copiar" }}
+          </button>
+        </article>
+      </div>
+    </section>
   </div>
-
-  <section class="results-section" *ngIf="jogosGerados.length > 0">
-    <div class="results-heading">
-      <span>{{ jogosGerados.length }} jogos</span>
-      <h2>Jogos gerados</h2>
-      <p>Copie uma combinação individual para salvar ou compartilhar.</p>
-    </div>
-
-    <div class="results-list">
-      <article
-        *ngFor="let jogo of jogosGerados; let i = index"
-        class="result-card fade-in"
-      >
-        <div class="result-index">#{{ i + 1 }}</div>
-        <div class="balls-grid">
-          <span *ngFor="let numero of jogo" class="number-ball">
-            {{ numero | number: "2.0" }}
-          </span>
-        </div>
-        <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
-          {{ statusCopia[i] || "Copiar" }}
-        </button>
-      </article>
-    </div>
-  </section>
 
   <p class="disclaimer">
     Os filtros não garantem prêmio nem aumentam a probabilidade matemática do

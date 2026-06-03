@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 
 import { GeradorLotofacilComponent } from './gerador-lotofacil';
 
@@ -44,4 +45,21 @@ describe('GeradorLotofacilComponent', () => {
     );
     expect(component.tipoMensagem).toBe('error');
   });
+
+  it('should generate games with 15 unique numbers between 1 and 25', fakeAsync(() => {
+    const lastDraw = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+
+    component.gerarJogos(lastDraw, '2');
+    tick(1000);
+
+    expect(component.jogosGerados.length).toBe(2);
+    component.jogosGerados.forEach((jogo) => {
+      expect(jogo.length).toBe(15);
+      expect(new Set(jogo).size).toBe(15);
+      jogo.forEach((dezena) => {
+        expect(dezena).toBeGreaterThanOrEqual(1);
+        expect(dezena).toBeLessThanOrEqual(25);
+      });
+    });
+  }));
 });
