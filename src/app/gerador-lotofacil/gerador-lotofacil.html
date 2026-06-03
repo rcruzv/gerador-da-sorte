@@ -1,89 +1,129 @@
-<section class="lottery-page lotofacil-theme">
-  <div class="lottery-hero">
+<section class="lottery-page lotofacil-theme generator-lab">
+  <header class="lab-header lotofacil-header">
     <div>
-      <span class="eyebrow">Lotofácil</span>
-      <h1>Gerador de jogos com último concurso</h1>
+      <div class="header-tags">
+        <span class="pill-label">Lotofacil</span>
+        <span class="pill-label neutral">Filtros estatisticos</span>
+      </div>
+      <h1>Gerador de Jogos</h1>
       <p>
-        Informe as 15 dezenas do último concurso e gere jogos com repetição,
-        paridade, moldura, primos e soma validados pela lógica real do projeto.
+        Otimize suas apostas com filtros matematicos conectados a logica real:
+        repetidas, impares, moldura, primos e soma total.
       </p>
     </div>
-    <div class="hero-summary" aria-label="Resumo das regras da Lotofácil">
-      <strong>15</strong>
-      <span>dezenas por jogo</span>
-      <small>Último concurso obrigatório</small>
-    </div>
-  </div>
+
+    <button type="button" class="soft-action">Importar</button>
+  </header>
 
   <div class="generator-workspace lotofacil-workspace">
-    <form
-      class="config-card generator-panel"
-      (submit)="$event.preventDefault(); gerarJogosFromSlots(numGamesLf.value)"
-    >
-      <div class="card-heading">
-        <span class="step-badge">01</span>
-        <div>
-          <h2>Último sorteio</h2>
-          <p>Digite as 15 dezenas válidas entre 1 e 25.</p>
+    <aside class="generator-panel">
+      <form
+        class="lab-card filter-panel"
+        (submit)="$event.preventDefault(); gerarJogosFromSlots(numGamesLf.value)"
+      >
+        <div class="panel-title">
+          <span class="panel-icon">↻</span>
+          <h2>Ultimo Sorteio (Mandatorio)</h2>
         </div>
-      </div>
 
-      <div class="last-draw-grid" aria-label="Dezenas do último concurso">
-        <label *ngFor="let slot of lastDrawSlots; let i = index">
-          <span>{{ i + 1 | number: "2.0" }}</span>
-          <input
-            #lastDrawInput
-            type="number"
-            min="1"
-            max="25"
-            inputmode="numeric"
-            [attr.aria-label]="'Dezena ' + (i + 1)"
-          />
-        </label>
-      </div>
+        <div class="last-draw-grid compact" aria-label="Dezenas do ultimo concurso">
+          <label *ngFor="let slot of lastDrawSlots; let i = index">
+            <input
+              #lastDrawInput
+              type="number"
+              min="1"
+              max="25"
+              inputmode="numeric"
+              [placeholder]="i + 1 | number: '2.0'"
+              [attr.aria-label]="'Dezena ' + (i + 1)"
+            />
+          </label>
+        </div>
 
-      <div class="field-group">
+        <div class="panel-title spaced">
+          <span class="panel-icon">≡</span>
+          <h2>Filtros Avancados</h2>
+        </div>
+
+        <div class="advanced-filter-list">
+          <article>
+            <div>
+              <strong>Numeros Repetidos</strong>
+              <span>Sugestao: 8 a 10</span>
+            </div>
+            <b>8</b><em>a</em><b>10</b>
+          </article>
+          <article>
+            <div>
+              <strong>Numeros Impares</strong>
+              <span>Sugestao: 7 a 8</span>
+            </div>
+            <b>7</b><em>a</em><b>8</b>
+          </article>
+          <article>
+            <div>
+              <strong>Moldura (Bordas)</strong>
+              <span>Sugestao: 9 a 11</span>
+            </div>
+            <b>9</b><em>a</em><b>11</b>
+          </article>
+          <article>
+            <div>
+              <strong>Numeros Primos</strong>
+              <span>Sugestao: 4 a 6</span>
+            </div>
+            <b>4</b><em>a</em><b>6</b>
+          </article>
+          <article>
+            <div>
+              <strong>Soma Total</strong>
+              <span>Sugestao: 185 a 220</span>
+            </div>
+            <b>185</b><em>a</em><b>220</b>
+          </article>
+        </div>
+
         <label for="num-games-lf" class="field-label">
-          Quantidade de jogos a gerar
+          Quantidade de jogos
         </label>
-        <div class="input-row">
+        <div class="input-row select-like">
           <input
             #numGamesLf
             type="number"
             id="num-games-lf"
-            value="3"
+            value="10"
             min="1"
             max="50"
             inputmode="numeric"
           />
-          <span>máx. 50</span>
+          <span>max. 50</span>
         </div>
-      </div>
 
-      <button type="submit" [disabled]="estaGerando" class="primary-action">
-        {{ estaGerando ? "Gerando..." : "Gerar combinações" }}
-      </button>
+        <button type="submit" [disabled]="estaGerando" class="primary-action big-action">
+          {{ estaGerando ? "Processando..." : "Gerar Agora" }}
+        </button>
 
-      <div
-        *ngIf="mensagem"
-        [ngClass]="{
-          'message-error': tipoMensagem === 'error',
-          'message-success': tipoMensagem === 'success',
-        }"
-        class="feedback-message"
-      >
-        {{ mensagem }}
-      </div>
-    </form>
+        <div
+          *ngIf="mensagem"
+          [ngClass]="{
+            'message-error': tipoMensagem === 'error',
+            'message-success': tipoMensagem === 'success',
+          }"
+          class="feedback-message"
+        >
+          {{ mensagem }}
+        </div>
+      </form>
+    </aside>
 
-    <section class="results-console">
-      <div class="result-metrics">
+    <section class="results-column">
+      <div class="metric-grid">
         <article>
           <span>Repetidas</span>
           <strong>8-10</strong>
         </article>
         <article>
-          <span>Ímpares</span>
+          <span>Impares</span>
           <strong>7-8</strong>
         </article>
         <article>
@@ -96,63 +136,64 @@
         </article>
       </div>
 
-      <div class="results-heading compact">
-        <span>{{ jogosGerados.length || 0 }} jogos</span>
-        <h2>Jogos gerados</h2>
-        <p>Cada card exibe os critérios calculados a partir do resultado.</p>
-      </div>
+      <div class="results-console lab-card">
+        <div class="results-toolbar">
+          <h2>Jogos Gerados</h2>
+          <span>{{ jogosGerados.length || 0 }} jogos</span>
+        </div>
 
-      <div *ngIf="estaGerando" class="empty-state loading-state">
-        <span class="empty-icon">15</span>
-        <h3>Processando combinações</h3>
-        <p>Validando repetidas, paridade, moldura, primos e soma.</p>
-      </div>
+        <div *ngIf="estaGerando" class="empty-state loading-state">
+          <span class="empty-icon">15</span>
+          <h3>Processando combinacoes</h3>
+          <p>Validando repetidas, paridade, moldura, primos e soma.</p>
+        </div>
 
-      <div *ngIf="!estaGerando && jogosGerados.length === 0" class="empty-state">
-        <span class="empty-icon">15</span>
-        <h3>Preencha o último sorteio</h3>
-        <p>Depois de informar as dezenas, os resultados aparecerão aqui.</p>
-      </div>
+        <div *ngIf="!estaGerando && jogosGerados.length === 0" class="empty-state">
+          <span class="empty-icon">15</span>
+          <h3>Preencha o ultimo sorteio</h3>
+          <p>Depois de informar as dezenas, os resultados aparecerao aqui.</p>
+        </div>
 
-      <div class="results-list" *ngIf="!estaGerando && jogosGerados.length > 0">
-        <article
-          *ngFor="let jogo of jogosGerados; let i = index"
-          class="result-card loto-card fade-in"
-        >
-          <div class="result-index">Jogo #{{ i + 1 }}</div>
-          <div class="balls-grid lotofacil-results">
-            <span *ngFor="let numero of jogo" class="number-ball-loto">
-              {{ numero | number: "2.0" }}
-            </span>
-          </div>
-          <dl class="result-summary">
-            <div>
-              <dt>Repetidas</dt>
-              <dd>{{ getLotofacilSummary(jogo).repeated }}</dd>
+        <div class="results-list" *ngIf="!estaGerando && jogosGerados.length > 0">
+          <article
+            *ngFor="let jogo of jogosGerados; let i = index"
+            class="result-card loto-card lab-result fade-in"
+          >
+            <div class="result-index">Jogo #{{ i + 1 }} - criterios aplicados</div>
+            <div class="balls-grid lotofacil-results">
+              <span *ngFor="let numero of jogo" class="number-ball-loto">
+                {{ numero | number: "2.0" }}
+              </span>
             </div>
-            <div>
-              <dt>Ímpares</dt>
-              <dd>{{ getLotofacilSummary(jogo).odd }}</dd>
-            </div>
-            <div>
-              <dt>Primos</dt>
-              <dd>{{ getLotofacilSummary(jogo).prime }}</dd>
-            </div>
-            <div>
-              <dt>Soma</dt>
-              <dd>{{ getLotofacilSummary(jogo).sum }}</dd>
-            </div>
-          </dl>
-          <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
-            {{ statusCopia[i] || "Copiar" }}
-          </button>
-        </article>
+            <dl class="result-summary inline-summary">
+              <div>
+                <dt>Repetidas</dt>
+                <dd>{{ getLotofacilSummary(jogo).repeated }}</dd>
+              </div>
+              <div>
+                <dt>Impares</dt>
+                <dd>{{ getLotofacilSummary(jogo).odd }}</dd>
+              </div>
+              <div>
+                <dt>Primos</dt>
+                <dd>{{ getLotofacilSummary(jogo).prime }}</dd>
+              </div>
+              <div>
+                <dt>Soma</dt>
+                <dd>{{ getLotofacilSummary(jogo).sum }}</dd>
+              </div>
+            </dl>
+            <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
+              {{ statusCopia[i] || "Copiar" }}
+            </button>
+          </article>
+        </div>
       </div>
     </section>
   </div>
 
   <p class="disclaimer">
-    Os filtros não garantem prêmio nem aumentam a probabilidade matemática do
+    Os filtros nao garantem premio nem aumentam a probabilidade matematica do
     sorteio.
   </p>
 </section>

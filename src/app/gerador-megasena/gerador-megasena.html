@@ -1,111 +1,137 @@
-<section class="lottery-page megasena-theme">
-  <div class="lottery-hero">
+<section class="lottery-page megasena-theme generator-lab">
+  <header class="lab-header">
     <div>
-      <span class="eyebrow">Mega-Sena</span>
-      <h1>Gerador de jogos com filtros reais</h1>
+      <span class="pill-label">Mega-Sena</span>
+      <h1>Mega-Sena <span>Pro</span></h1>
       <p>
-        Configure a quantidade de jogos e gere combinações com paridade, soma,
-        quadrantes e restrições de linha/coluna já aplicados pela lógica do
-        projeto.
+        Configure filtros matematicos conectados a logica real do projeto para
+        gerar combinacoes com criterios estatisticos populares.
       </p>
     </div>
-    <div class="hero-summary hero-status" aria-label="Resumo da Mega-Sena">
-      <strong>6</strong>
-      <span>dezenas por jogo</span>
-      <small>Até 50 combinações por lote</small>
+
+    <div class="data-chip">
+      <span aria-hidden="true"></span>
+      Base local demonstrativa
     </div>
-  </div>
+  </header>
 
   <div class="generator-workspace">
-    <form
-      class="config-card generator-panel"
-      (submit)="$event.preventDefault(); gerarJogos(numGames.value)"
-    >
-      <div class="card-heading">
-        <span class="step-badge">01</span>
-        <div>
-          <h2>Filtros de probabilidade</h2>
-          <p>
-            Os parâmetros abaixo são fixos nesta etapa e conectados à lógica
-            real de geração.
-          </p>
-        </div>
-      </div>
-
-      <div class="filter-stack">
-        <article class="filter-tile">
-          <span>Equilíbrio par/ímpar</span>
-          <strong>2, 3 ou 4 ímpares</strong>
-        </article>
-        <article class="filter-tile">
-          <span>Soma dos números</span>
-          <strong>160 a 240</strong>
-        </article>
-        <article class="filter-tile">
-          <span>Distribuição</span>
-          <strong>Mín. 3 quadrantes</strong>
-        </article>
-        <article class="filter-tile">
-          <span>Linha e coluna</span>
-          <strong>Máx. 2 por eixo</strong>
-        </article>
-      </div>
-
-      <label for="num-games" class="field-label">
-        Quantidade de jogos a gerar
-      </label>
-      <div class="input-row">
-        <input
-          #numGames
-          type="number"
-          id="num-games"
-          value="3"
-          min="1"
-          max="50"
-          inputmode="numeric"
-        />
-        <span>máx. 50</span>
-      </div>
-
-      <button type="submit" [disabled]="estaGerando" class="primary-action">
-        {{ estaGerando ? "Gerando..." : "Gerar combinações" }}
-      </button>
-
-      <div
-        *ngIf="mensagem"
-        [ngClass]="{
-          'message-error': tipoMensagem === 'error',
-          'message-success': tipoMensagem === 'success',
-        }"
-        class="feedback-message"
+    <aside class="generator-panel">
+      <form
+        class="lab-card filter-panel"
+        (submit)="$event.preventDefault(); gerarJogos(numGames.value)"
       >
-        {{ mensagem }}
-      </div>
-    </form>
+        <div class="panel-title">
+          <span class="panel-icon">≡</span>
+          <h2>Filtros de Probabilidade</h2>
+        </div>
 
-    <section class="results-console">
-      <div class="results-heading compact">
-        <span>{{ jogosGerados.length || 0 }} jogos</span>
-        <h2>Sugestões geradas</h2>
-        <p>Copie uma combinação individual para salvar ou compartilhar.</p>
-      </div>
+        <div class="filter-stack">
+          <article class="filter-tile range-tile">
+            <div>
+              <span>Equilibrio Par/Impar</span>
+              <strong>2, 3 ou 4 impares</strong>
+            </div>
+            <div class="fake-range" aria-hidden="true"><i style="left: 50%"></i></div>
+          </article>
 
+          <article class="filter-tile range-tile">
+            <div>
+              <span>Soma dos Numeros (160-240)</span>
+              <strong>Faixa aplicada</strong>
+            </div>
+            <div class="fake-range" aria-hidden="true"><i style="left: 46%"></i></div>
+          </article>
+
+          <article class="filter-tile">
+            <div class="tile-row">
+              <div>
+                <span>Distribuicao Quadrante</span>
+                <strong>Min. 3 quadrantes</strong>
+              </div>
+              <div class="segmented-control" aria-hidden="true">
+                <b>3</b>
+                <em>4</em>
+              </div>
+            </div>
+          </article>
+
+          <article class="filter-tile">
+            <span>Restricoes de Linha/Coluna</span>
+            <div class="check-grid">
+              <span>Max 2 p/ linha</span>
+              <span>Max 2 p/ coluna</span>
+            </div>
+          </article>
+        </div>
+
+        <label for="num-games" class="field-label">
+          Quantidade de jogos
+        </label>
+        <div class="input-row">
+          <input
+            #numGames
+            type="number"
+            id="num-games"
+            value="5"
+            min="1"
+            max="50"
+            inputmode="numeric"
+          />
+          <span>max. 50</span>
+        </div>
+
+        <button type="submit" [disabled]="estaGerando" class="primary-action">
+          {{ estaGerando ? "Processando..." : "Gerar Jogos" }}
+        </button>
+
+        <div
+          *ngIf="mensagem"
+          [ngClass]="{
+            'message-error': tipoMensagem === 'error',
+            'message-success': tipoMensagem === 'success',
+          }"
+          class="feedback-message"
+        >
+          {{ mensagem }}
+        </div>
+      </form>
+
+      <aside class="info-card">
+        <h3>Por que esses filtros?</h3>
+        <p>
+          Eles reduzem combinacoes fora de criterios comuns como soma, paridade,
+          quadrantes e distribuicao de linha/coluna. Isso nao altera a chance
+          matematica do sorteio.
+        </p>
+      </aside>
+    </aside>
+
+    <section class="results-console lab-card">
       <div *ngIf="estaGerando" class="empty-state loading-state">
         <span class="empty-icon">...</span>
-        <h3>Processando combinações</h3>
-        <p>Os filtros estão sendo aplicados em lotes para evitar travamentos.</p>
+        <h3>Processando combinacoes</h3>
+        <p>Os filtros estao sendo aplicados em lotes para evitar travamentos.</p>
       </div>
 
       <div *ngIf="!estaGerando && jogosGerados.length === 0" class="empty-state">
         <span class="empty-icon">6</span>
-        <h3>Pronto para gerar</h3>
-        <p>Ajuste a quantidade ao lado e inicie a geração filtrada.</p>
+        <h3>Pronto para a Sorte?</h3>
+        <p>
+          Ajuste a quantidade ao lado e clique em "Gerar Jogos" para visualizar
+          as combinacoes sugeridas pelo laboratorio.
+        </p>
       </div>
 
       <div class="results-list" *ngIf="!estaGerando && jogosGerados.length > 0">
+        <div class="results-toolbar">
+          <h2>Sugestoes Geradas</h2>
+          <span>{{ jogosGerados.length }} jogos</span>
+        </div>
+
         <article
           *ngFor="let jogo of jogosGerados; let i = index"
-          class="result-card fade-in"
+          class="result-card lab-result fade-in"
         >
           <div class="result-index">Jogo #{{ i + 1 }}</div>
           <div class="balls-grid">
@@ -122,7 +148,7 @@
   </div>
 
   <p class="disclaimer">
-    Os filtros não garantem prêmio nem aumentam a probabilidade matemática do
+    Os filtros nao garantem premio nem aumentam a probabilidade matematica do
     sorteio.
   </p>
 </section>
