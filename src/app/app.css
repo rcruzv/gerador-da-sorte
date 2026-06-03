@@ -231,6 +231,16 @@
   background: linear-gradient(135deg, #004ac6, #7c3aed);
 }
 
+.shell-icon-svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .user-dropdown {
   position: absolute;
   top: calc(100% + 0.55rem);
@@ -245,15 +255,30 @@
   backdrop-filter: blur(14px);
 }
 
-.user-dropdown a {
-  padding: 0.65rem 0.75rem;
-  border-radius: 0.55rem;
-  color: #0f172a;
-  font-size: 0.86rem;
-  font-weight: 800;
+.user-dropdown strong {
+  padding: 0.6rem 0.75rem 0.45rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  text-transform: uppercase;
 }
 
-.user-dropdown a:hover {
+.user-dropdown a,
+.user-dropdown button {
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
   background: #eff4ff;
 }
 

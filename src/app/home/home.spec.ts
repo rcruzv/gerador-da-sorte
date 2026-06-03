@@ -20,10 +20,10 @@ describe('HomeComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render generator calls to action', () => {
+  it('should render auth calls to action', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.textContent).toContain('Gerar Mega-Sena');
-    expect(compiled.textContent).toContain('Testar Lotofácil');
+    expect(compiled.textContent).toContain('Criar conta');
   });
 });

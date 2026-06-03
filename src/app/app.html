@@ -1,4 +1,4 @@
-<ng-container *ngIf="isLandingRoute(); else authenticatedShell">
+<ng-container *ngIf="isPublicRoute(); else authenticatedShell">
   <router-outlet></router-outlet>
 </ng-container>
 
@@ -23,9 +23,9 @@
       </a>
 
       <nav class="sidebar-nav">
-        <a routerLink="/estatisticas" routerLinkActive="active-link" data-tooltip="Estatísticas">
+        <a routerLink="/estatisticas" routerLinkActive="active-link" data-tooltip="Estatisticas">
           <span class="nav-icon" aria-hidden="true">%</span>
-          <span class="nav-label">Estatísticas</span>
+          <span class="nav-label">Estatisticas</span>
         </a>
 
         <div class="sidebar-divider" aria-hidden="true"></div>
@@ -34,9 +34,9 @@
           <span class="nav-icon" aria-hidden="true">6</span>
           <span class="nav-label">Mega-Sena</span>
         </a>
-        <a routerLink="/lotofacil" routerLinkActive="active-link" data-tooltip="Lotofácil">
+        <a routerLink="/lotofacil" routerLinkActive="active-link" data-tooltip="Lotofacil">
           <span class="nav-icon" aria-hidden="true">15</span>
-          <span class="nav-label">Lotofácil</span>
+          <span class="nav-label">Lotofacil</span>
         </a>
         <a routerLink="/quina" routerLinkActive="active-link" data-tooltip="Quina">
           <span class="nav-icon" aria-hidden="true">5</span>
@@ -64,7 +64,15 @@
         [attr.title]="isSidebarCollapsed() ? 'Expandir menu' : 'Reduzir menu'"
         (click)="toggleSidebar()"
       >
-        {{ isSidebarCollapsed() ? "☰" : "☷" }}
+        <svg class="shell-icon-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path
+            [attr.d]="
+              isSidebarCollapsed()
+                ? 'M8 10h16M8 16h16M8 22h16'
+                : 'M10 8v16M17 10h7M17 16h7M17 22h7'
+            "
+          />
+        </svg>
       </button>
 
       <button
@@ -74,25 +82,28 @@
         title="Tela cheia"
         (click)="toggleFullscreen()"
       >
-        ⛶
+        <svg class="shell-icon-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M10 6H6v4M22 6h4v4M6 22v4h4M26 22v4h-4" />
+        </svg>
       </button>
 
       <div class="user-menu">
         <button
           type="button"
           class="user-avatar"
-          aria-label="Abrir menu do usuário"
+          aria-label="Abrir menu do usuario"
           [attr.aria-expanded]="isUserMenuOpen()"
           (click)="toggleUserMenu()"
         >
-          U
+          {{ currentUser()?.name?.charAt(0) || "U" }}
         </button>
 
         <div class="user-dropdown" *ngIf="isUserMenuOpen()">
+          <strong>{{ currentUser()?.name || "Usuario" }}</strong>
           <a href="#">Perfil</a>
-          <a href="#">Preferências</a>
+          <a href="#">Preferencias</a>
           <a href="#">Suporte</a>
-          <a href="#">Sair</a>
+          <button type="button" (click)="logout()">Sair</button>
         </div>
       </div>
     </div>
