@@ -1,129 +1,146 @@
-<section class="lottery-page loteca-theme">
-  <div class="lottery-hero">
+<section class="lottery-page loteca-theme generator-lab">
+  <header class="lab-header">
     <div>
-      <span class="eyebrow">Gerador da sorte</span>
-      <h1>Gerador Inteligente Loteca</h1>
+      <div class="header-tags">
+        <span class="pill-label">Loteca</span>
+        <span class="pill-label neutral">Palpites 1X2</span>
+      </div>
+      <h1>Gerador de Palpites</h1>
       <p>
-        Crie palpites com 14 resultados possíveis em uma visualização moderna,
-        organizada e alinhada ao layout da Quina.
+        Monte cartoes com 14 posicoes e resultados 1, X ou 2 dentro da mesma
+        interface visual dos demais geradores.
       </p>
     </div>
-    <div class="hero-summary" aria-label="Resumo das regras da Loteca">
-      <strong>14</strong>
-      <span>posições por palpite</span>
-    </div>
-  </div>
 
-  <div class="content-grid">
-    <form
-      class="config-card"
-      (submit)="$event.preventDefault(); gerarPalpites(numGames.value)"
-    >
-      <div class="card-heading">
-        <span class="step-badge">01</span>
-        <div>
+    <div class="data-chip">
+      <span aria-hidden="true"></span>
+      14 jogos por cartao
+    </div>
+  </header>
+
+  <div class="generator-workspace">
+    <aside class="generator-panel">
+      <form
+        class="lab-card filter-panel"
+        (submit)="$event.preventDefault(); gerarPalpites(numGames.value)"
+      >
+        <div class="panel-title">
+          <span class="panel-icon">1X2</span>
           <h2>Defina seus palpites</h2>
-          <p>Escolha quantos cartões deseja gerar agora.</p>
         </div>
-      </div>
 
-      <label for="num-games-loteca" class="field-label">
-        Quantidade de palpites a gerar
-      </label>
-      <div class="input-row">
-        <input
-          #numGames
-          type="number"
-          id="num-games-loteca"
-          value="3"
-          min="1"
-          max="50"
-          inputmode="numeric"
-        />
-        <span>máx. 50</span>
-      </div>
-
-      <button type="submit" class="primary-action">Gerar palpites</button>
-
-      <div
-        *ngIf="mensagem"
-        [ngClass]="{
-          'message-error': tipoMensagem === 'error',
-          'message-success': tipoMensagem === 'success',
-        }"
-        class="feedback-message"
-      >
-        {{ mensagem }}
-      </div>
-    </form>
-
-    <aside class="rules-card">
-      <div class="card-heading">
-        <span class="step-badge">02</span>
-        <div>
-          <h2>Regras do jogo</h2>
-          <p>Parâmetros usados para montar cada palpite.</p>
+        <div class="filter-stack">
+          <article class="filter-tile">
+            <span>Cartao</span>
+            <strong>14 posicoes</strong>
+          </article>
+          <article class="filter-tile">
+            <span>Resultados validos</span>
+            <strong>1, X ou 2</strong>
+          </article>
+          <article class="filter-tile">
+            <span>Geracao em lote</span>
+            <strong>Ate 50 palpites</strong>
+          </article>
         </div>
-      </div>
 
-      <ul class="rules-list">
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>14 posições</strong>
-            <small
-              >Cada palpite acompanha a sequência de jogos da rodada.</small
-            >
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Três possibilidades</strong>
-            <small>Os resultados válidos são 1, X ou 2.</small>
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Geração em lote</strong>
-            <small>Você pode criar até 50 palpites por vez.</small>
-          </div>
-        </li>
-      </ul>
-    </aside>
-  </div>
-
-  <section class="results-section" *ngIf="palpitesGerados.length > 0">
-    <div class="results-heading">
-      <span>{{ palpitesGerados.length }} palpites</span>
-      <h2>Palpites gerados</h2>
-      <p>Copie um palpite individual para salvar ou compartilhar.</p>
-    </div>
-
-    <div class="results-list">
-      <article
-        *ngFor="let palpite of palpitesGerados; let i = index"
-        class="result-card fade-in"
-      >
-        <div class="result-index">#{{ i + 1 }}</div>
-        <div class="balls-grid loteca-results">
-          <span *ngFor="let resultado of palpite" class="result-ball-loteca">
-            {{ resultado }}
-          </span>
+        <label for="num-games-loteca" class="field-label">
+          Quantidade de palpites
+        </label>
+        <div class="input-row">
+          <input
+            #numGames
+            type="number"
+            id="num-games-loteca"
+            value="5"
+            min="1"
+            max="50"
+            inputmode="numeric"
+          />
+          <span>max. 50</span>
         </div>
-        <button
-          type="button"
-          (click)="copiarPalpite(palpite, i)"
-          class="copy-action"
+
+        <button type="submit" class="primary-action">Gerar Palpites</button>
+
+        <div
+          *ngIf="mensagem"
+          [ngClass]="{
+            'message-error': tipoMensagem === 'error',
+            'message-success': tipoMensagem === 'success',
+          }"
+          class="feedback-message"
         >
-          {{ statusCopia[i] || "Copiar" }}
-        </button>
-      </article>
-    </div>
-  </section>
+          {{ mensagem }}
+        </div>
+      </form>
+
+      <aside class="info-card">
+        <h3>Como ler o cartao</h3>
+        <p>
+          Cada capsula representa uma partida da rodada. O valor gerado indica
+          mandante, empate ou visitante, conforme a marcacao tradicional 1X2.
+        </p>
+      </aside>
+    </aside>
+
+    <section class="results-column">
+      <div class="metric-grid">
+        <article>
+          <span>Posicoes</span>
+          <strong>14</strong>
+        </article>
+        <article>
+          <span>Opcoes</span>
+          <strong>3</strong>
+        </article>
+        <article>
+          <span>Limite</span>
+          <strong>50</strong>
+        </article>
+        <article>
+          <span>Modo</span>
+          <strong>1X2</strong>
+        </article>
+      </div>
+
+      <div class="results-console lab-card">
+        <div class="results-toolbar">
+          <h2>Palpites Gerados</h2>
+          <span>{{ palpitesGerados.length || 0 }} palpites</span>
+        </div>
+
+        <div *ngIf="palpitesGerados.length === 0" class="empty-state loteca-empty">
+          <span class="empty-icon">1X2</span>
+          <h3>Pronto para gerar</h3>
+          <p>Escolha a quantidade ao lado e veja os cartoes nesta area.</p>
+        </div>
+
+        <div class="results-list" *ngIf="palpitesGerados.length > 0">
+          <article
+            *ngFor="let palpite of palpitesGerados; let i = index"
+            class="result-card loteca-card lab-result fade-in"
+          >
+            <div class="result-index">Palpite #{{ i + 1 }}</div>
+            <div class="balls-grid loteca-results">
+              <span *ngFor="let resultado of palpite; let match = index" class="result-ball-loteca">
+                <small>{{ match + 1 }}</small>
+                {{ resultado }}
+              </span>
+            </div>
+            <button
+              type="button"
+              (click)="copiarPalpite(palpite, i)"
+              class="copy-action"
+            >
+              {{ statusCopia[i] || "Copiar" }}
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <p class="disclaimer">
-    Os palpites são sugestões aleatórias e não garantem prêmio.
+    Os palpites sao sugestoes aleatorias e nao garantem premio.
   </p>
 </section>

@@ -1,123 +1,141 @@
-<section class="lottery-page quina-theme">
-  <div class="lottery-hero">
+<section class="lottery-page quina-theme generator-lab">
+  <header class="lab-header">
     <div>
-      <span class="eyebrow">Gerador da sorte</span>
-      <h1>Gerador Inteligente Quina</h1>
+      <div class="header-tags">
+        <span class="pill-label">Quina</span>
+        <span class="pill-label neutral">Geracao rapida</span>
+      </div>
+      <h1>Gerador de Jogos</h1>
       <p>
-        Monte jogos com 5 dezenas entre 1 e 80 em uma experiência mais limpa,
-        rápida e fácil de acompanhar.
+        Crie jogos com 5 dezenas unicas entre 1 e 80 mantendo a mesma
+        experiencia visual do laboratorio de probabilidade.
       </p>
     </div>
-    <div class="hero-summary" aria-label="Resumo das regras da Quina">
-      <strong>5</strong>
-      <span>dezenas por jogo</span>
-    </div>
-  </div>
 
-  <div class="content-grid">
-    <form
-      class="config-card"
-      (submit)="$event.preventDefault(); gerarJogos(numGames.value)"
-    >
-      <div class="card-heading">
-        <span class="step-badge">01</span>
-        <div>
+    <div class="data-chip">
+      <span aria-hidden="true"></span>
+      5 dezenas por jogo
+    </div>
+  </header>
+
+  <div class="generator-workspace">
+    <aside class="generator-panel">
+      <form
+        class="lab-card filter-panel"
+        (submit)="$event.preventDefault(); gerarJogos(numGames.value)"
+      >
+        <div class="panel-title">
+          <span class="panel-icon">5</span>
           <h2>Defina sua aposta</h2>
-          <p>Escolha quantas combinações deseja gerar agora.</p>
         </div>
-      </div>
 
-      <label for="num-games-quina" class="field-label">
-        Quantidade de jogos a gerar
-      </label>
-      <div class="input-row">
-        <input
-          #numGames
-          type="number"
-          id="num-games-quina"
-          value="3"
-          min="1"
-          max="50"
-          inputmode="numeric"
-        />
-        <span>máx. 50</span>
-      </div>
-
-      <button type="submit" class="primary-action">Gerar combinações</button>
-
-      <div
-        *ngIf="mensagem"
-        [ngClass]="{
-          'message-error': tipoMensagem === 'error',
-          'message-success': tipoMensagem === 'success',
-        }"
-        class="feedback-message"
-      >
-        {{ mensagem }}
-      </div>
-    </form>
-
-    <aside class="rules-card">
-      <div class="card-heading">
-        <span class="step-badge">02</span>
-        <div>
-          <h2>Regras do jogo</h2>
-          <p>Parâmetros usados para montar cada aposta.</p>
+        <div class="filter-stack">
+          <article class="filter-tile">
+            <span>Composicao</span>
+            <strong>5 dezenas unicas</strong>
+          </article>
+          <article class="filter-tile">
+            <span>Intervalo</span>
+            <strong>1 a 80</strong>
+          </article>
+          <article class="filter-tile">
+            <span>Geracao em lote</span>
+            <strong>Ate 50 jogos</strong>
+          </article>
         </div>
-      </div>
 
-      <ul class="rules-list">
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>5 dezenas</strong>
-            <small>Cada jogo é composto por cinco números únicos.</small>
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Intervalo completo</strong>
-            <small>As dezenas são sorteadas entre 1 e 80.</small>
-          </div>
-        </li>
-        <li>
-          <span>✓</span>
-          <div>
-            <strong>Geração em lote</strong>
-            <small>Você pode criar até 50 jogos por vez.</small>
-          </div>
-        </li>
-      </ul>
+        <label for="num-games-quina" class="field-label">
+          Quantidade de jogos
+        </label>
+        <div class="input-row">
+          <input
+            #numGames
+            type="number"
+            id="num-games-quina"
+            value="5"
+            min="1"
+            max="50"
+            inputmode="numeric"
+          />
+          <span>max. 50</span>
+        </div>
+
+        <button type="submit" class="primary-action">Gerar Jogos</button>
+
+        <div
+          *ngIf="mensagem"
+          [ngClass]="{
+            'message-error': tipoMensagem === 'error',
+            'message-success': tipoMensagem === 'success',
+          }"
+          class="feedback-message"
+        >
+          {{ mensagem }}
+        </div>
+      </form>
+
+      <aside class="info-card">
+        <h3>Regras do jogo</h3>
+        <p>
+          Cada combinacao usa cinco numeros sem repeticao. A geracao e
+          aleatoria e serve apenas como apoio para montar apostas.
+        </p>
+      </aside>
     </aside>
-  </div>
 
-  <section class="results-section" *ngIf="jogosGerados.length > 0">
-    <div class="results-heading">
-      <span>{{ jogosGerados.length }} jogos</span>
-      <h2>Jogos gerados</h2>
-      <p>Copie uma combinação individual para salvar ou compartilhar.</p>
-    </div>
+    <section class="results-column">
+      <div class="metric-grid">
+        <article>
+          <span>Dezenas</span>
+          <strong>5</strong>
+        </article>
+        <article>
+          <span>Faixa</span>
+          <strong>1-80</strong>
+        </article>
+        <article>
+          <span>Limite</span>
+          <strong>50</strong>
+        </article>
+        <article>
+          <span>Tipo</span>
+          <strong>Unico</strong>
+        </article>
+      </div>
 
-    <div class="results-list">
-      <article
-        *ngFor="let jogo of jogosGerados; let i = index"
-        class="result-card fade-in"
-      >
-        <div class="result-index">#{{ i + 1 }}</div>
-        <div class="balls-grid">
-          <span *ngFor="let numero of jogo" class="number-ball-quina">
-            {{ numero | number: "2.0" }}
-          </span>
+      <div class="results-console lab-card">
+        <div class="results-toolbar">
+          <h2>Jogos Gerados</h2>
+          <span>{{ jogosGerados.length || 0 }} jogos</span>
         </div>
-        <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
-          {{ statusCopia[i] || "Copiar" }}
-        </button>
-      </article>
-    </div>
-  </section>
+
+        <div *ngIf="jogosGerados.length === 0" class="empty-state">
+          <span class="empty-icon">5</span>
+          <h3>Pronto para gerar</h3>
+          <p>Defina a quantidade ao lado e visualize suas combinacoes aqui.</p>
+        </div>
+
+        <div class="results-list" *ngIf="jogosGerados.length > 0">
+          <article
+            *ngFor="let jogo of jogosGerados; let i = index"
+            class="result-card lab-result fade-in"
+          >
+            <div class="result-index">Jogo #{{ i + 1 }}</div>
+            <div class="balls-grid">
+              <span *ngFor="let numero of jogo" class="number-ball-quina">
+                {{ numero | number: "2.0" }}
+              </span>
+            </div>
+            <button type="button" (click)="copiarJogo(jogo, i)" class="copy-action">
+              {{ statusCopia[i] || "Copiar" }}
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <p class="disclaimer">
-    Os jogos são sugestões aleatórias e não garantem prêmio.
+    Os jogos sao sugestoes aleatorias e nao garantem premio.
   </p>
 </section>
