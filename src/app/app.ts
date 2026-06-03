@@ -1,6 +1,12 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +17,30 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('gerador-da-sorte');
   private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
+  private readonly currentPath = signal(this.document.location.pathname);
+  protected readonly isSidebarCollapsed = signal(false);
+  protected readonly isUserMenuOpen = signal(false);
+  protected readonly isLandingRoute = computed(() => {
+    const path = this.currentPath().split('?')[0].split('#')[0];
+    return path === '' || path === '/';
+  });
+
+  constructor() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentPath.set(event.urlAfterRedirects.split('?')[0].split('#')[0]);
+      }
+    });
+  }
+
+  protected toggleSidebar(): void {
+    this.isSidebarCollapsed.update((collapsed) => !collapsed);
+  }
+
+  protected toggleUserMenu(): void {
+    this.isUserMenuOpen.update((open) => !open);
+  }
 
   protected toggleFullscreen(): void {
     if (this.document.fullscreenElement) {
