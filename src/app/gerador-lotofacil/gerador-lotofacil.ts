@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  countIntersection,
+  createNumberRange,
+  formatGameForCopy,
+  generateCandidateNumbers,
+  generateUniqueNumberGames,
+  validateGameCount,
+} from '../shared/lottery-generator.utils';
 
 @Component({
   selector: 'app-gerador-lotofacil',
@@ -19,9 +27,7 @@ export class GeradorLotofacilComponent {
   private readonly MAX_GAMES = 50;
   private readonly MAX_ATTEMPTS = 500000;
   private readonly ATTEMPTS_PER_BATCH = 5000;
-  private readonly ALL_NUMBERS = new Set(
-    Array.from({ length: 25 }, (_, i) => i + 1),
-  );
+  private readonly ALL_NUMBERS = createNumberRange(25);
   private readonly ODD_NUMBERS = new Set([
     1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25,
   ]);
@@ -65,60 +71,39 @@ export class GeradorLotofacilComponent {
     this.statusCopia = {};
     this.mostrarMensagem('Buscando combinações filtradas...', 'info');
 
-    const generatedGames: number[][] = [];
-    const generatedGamesSet = new Set<string>();
-    let attempts = 0;
+    generateUniqueNumberGames({
+      requestedGames: numGames,
+      maxAttempts: this.MAX_ATTEMPTS,
+      attemptsPerBatch: this.ATTEMPTS_PER_BATCH,
+      generateCandidate: () => this.generateCandidate(),
+      isGameValid: (candidate) => this.isGameValid(candidate, lastDraw),
+      onComplete: (generatedGames) => {
+        this.jogosGerados = generatedGames;
+        this.estaGerando = false;
 
-    const processBatch = () => {
-      const batchLimit = Math.min(
-        attempts + this.ATTEMPTS_PER_BATCH,
-        this.MAX_ATTEMPTS,
-      );
-
-      while (generatedGames.length < numGames && attempts < batchLimit) {
-        const candidate = this.generateCandidate();
-        if (this.isGameValid(candidate, lastDraw)) {
-          const sortedGame = Array.from(candidate).sort((a, b) => a - b);
-          const gameKey = sortedGame.join(',');
-          if (!generatedGamesSet.has(gameKey)) {
-            generatedGames.push(sortedGame);
-            generatedGamesSet.add(gameKey);
-          }
+        if (this.jogosGerados.length < numGames) {
+          this.mostrarMensagem(
+            `Encontrados ${this.jogosGerados.length} de ${numGames} jogos.`,
+            'info',
+          );
+        } else {
+          this.mostrarMensagem(
+            `Sucesso! ${this.jogosGerados.length} jogos gerados.`,
+            'success',
+          );
         }
-        attempts++;
-      }
-
-      if (generatedGames.length < numGames && attempts < this.MAX_ATTEMPTS) {
-        setTimeout(processBatch, 0);
-        return;
-      }
-
-      this.jogosGerados = generatedGames;
-      this.estaGerando = false;
-
-      if (this.jogosGerados.length < numGames) {
-        this.mostrarMensagem(
-          `Encontrados ${this.jogosGerados.length} de ${numGames} jogos.`,
-          'info',
-        );
-      } else {
-        this.mostrarMensagem(
-          `Sucesso! ${this.jogosGerados.length} jogos gerados.`,
-          'success',
-        );
-      }
-    };
-
-    setTimeout(processBatch, 0);
+      },
+    });
   }
 
   private getValidatedGameCount(numGamesStr: string): number | null {
-    const numGames = Number(numGamesStr);
-    if (
-      !Number.isInteger(numGames) ||
-      numGames < this.MIN_GAMES ||
-      numGames > this.MAX_GAMES
-    ) {
+    const numGames = validateGameCount(
+      numGamesStr,
+      this.MIN_GAMES,
+      this.MAX_GAMES,
+    );
+
+    if (numGames === null) {
       this.mostrarMensagem(
         'Informe uma quantidade entre 1 e 50 jogos.',
         'error',
@@ -130,13 +115,6 @@ export class GeradorLotofacilComponent {
   }
 
   private isGameValid(candidate: Set<number>, lastDraw: Set<number>): boolean {
-    const countIntersection = (setA: Set<number>, setB: Set<number>) => {
-      let count = 0;
-      for (const elem of setA) {
-        if (setB.has(elem)) count++;
-      }
-      return count;
-    };
     const repeatedCount = countIntersection(candidate, lastDraw);
     if (![8, 9, 10].includes(repeatedCount)) return false;
     const oddCount = countIntersection(candidate, this.ODD_NUMBERS);
@@ -151,12 +129,7 @@ export class GeradorLotofacilComponent {
   }
 
   private generateCandidate(): Set<number> {
-    const numbers = Array.from(this.ALL_NUMBERS);
-    for (let i = numbers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-    }
-    return new Set(numbers.slice(0, 15));
+    return generateCandidateNumbers(this.ALL_NUMBERS, 15);
   }
 
   private mostrarMensagem(
@@ -168,7 +141,7 @@ export class GeradorLotofacilComponent {
   }
 
   copiarJogo(jogo: number[], index: number): void {
-    const gameString = jogo.join(', ');
+    const gameString = formatGameForCopy(jogo);
     if (!navigator.clipboard?.writeText) {
       this.statusCopia[index] = 'Erro ao copiar';
       this.mostrarMensagem(
